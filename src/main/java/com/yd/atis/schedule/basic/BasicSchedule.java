@@ -13,9 +13,9 @@ import com.yd.atis.service.basicService.AtisBasicWebService_ServiceLocator;
 import com.yd.atis.utils.DateUtils;
 import com.yd.atis.utils.FileUtils;
 import com.yd.atis.utils.JsonUtils;
-import com.yd.atis.utils.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +23,7 @@ import java.rmi.RemoteException;
 import java.util.Date;
 
 /**
+ * Atis基础服务调用
  * @author AsiQue
  * @since :2018.01.26 17:28
  */
@@ -36,6 +37,9 @@ public class BasicSchedule {
     private static String fileName = "";
 
     private static AtisBasicWebService_PortType basicService;
+
+    @Value("${log.path}")
+    private String logPath;
 
     private void initService() {
         try {
@@ -53,41 +57,68 @@ public class BasicSchedule {
         }
     }
 
-    @Scheduled(cron = "0/3 * * * * ?")
-    private void excuteAtisBasicService() {
-//        initService();
-
-        System.out.printf("basic schedule task run ****************************");
+    /**
+     * 定时调度任务 每天22：00调用一次
+     */
+    @Scheduled(cron = "0 0 22 * * ?")
+    public void excuteAtisBasicService() {
 
         logger.info("Atis basic task start!");
 
-//        //查询站点信息，关联线路
-//        getStationInfo();
+//        test();
 
-//        //查询站点信息，不关联线路
-//        getStationInfoNoRoute();
+        initService();
 
-//        getAllStation();
-//
-//        getAllStationNoRoute();
-//
-//        //查询线路信息
-//        getRouteInfo();
-//
-//        //查询线路单程信息
-//        getSegmentByRoute();
-//
-//        //查询站点线路信息
-//        getRouteByStation();
-//
-//        //查询单程站点列表
-//        getStationBySegment();
-//
-//        //按位置查找站点
-//        getStationByGps();
+        //查询站点信息，关联线路
+        getStationInfo();
+
+        //查询站点信息，不关联线路
+        getStationInfoNoRoute();
+
+        getAllStation();
+
+        getAllStationNoRoute();
+
+        //查询线路信息
+        getRouteInfo();
+
+        //查询线路单程信息
+        getSegmentByRoute();
+
+        //查询站点线路信息
+        getRouteByStation();
+
+        //查询单程站点列表
+        getStationBySegment();
+
+        //按位置查找站点
+        getStationByGps();
 
         logger.info("Atis basic task end!");
 
+    }
+
+    private void test() {
+
+        try {
+            StationRequest stationRequest = StationRequest.builder().stationId("-1").stationName("火车站").build();
+
+            String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getStationInfo" + SysConstant.LOG_FILE_SUFFIX;
+            FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(stationRequest), true);
+
+            logger.info("parameters:" + JsonUtils.toJson(stationRequest));
+
+            //获取站点基础信息
+            StationInfoEntity[] stations = new StationInfoEntity[1];
+
+            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stations), true);
+            logger.info("results:" + JsonUtils.toJson(stations));
+
+            throw new Exception("this is a manual exception");
+
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
     }
 
     /**
@@ -99,9 +130,7 @@ public class BasicSchedule {
         try {
             StationRequest stationRequest = StationRequest.builder().stationId("-1").stationName("火车站").build();
 
-
-
-            String fileName = PropertyUtils.getProperty(SysConstant.LOG_PATH) + DateUtils.format(new Date(), "yyyyMMdd") + "/getStationInfo" + SysConstant.LOG_FILE_SUFFIX;
+            String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getStationInfo" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(stationRequest), true);
 
             logger.info("parameters:" + JsonUtils.toJson(stationRequest));
@@ -130,9 +159,7 @@ public class BasicSchedule {
         try {
             StationRequest stationRequest = StationRequest.builder().stationId("-1").stationName("-1").build();
 
-
-
-            String fileName = PropertyUtils.getProperty(SysConstant.LOG_PATH) + DateUtils.format(new Date(), "yyyyMMdd") + "/getStationInfoNoRoute" + SysConstant.LOG_FILE_SUFFIX;
+            String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getStationInfoNoRoute" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(stationRequest), true);
 
             logger.info("parameters:" + JsonUtils.toJson(stationRequest));
@@ -160,7 +187,7 @@ public class BasicSchedule {
 
         try {
 
-            String fileName = PropertyUtils.getProperty(SysConstant.LOG_PATH) + DateUtils.format(new Date(), "yyyyMMdd") + "/getAllStation" + SysConstant.LOG_FILE_SUFFIX;
+            String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getAllStation" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + "null", true);
 
             logger.info("parameters: null");
@@ -188,7 +215,7 @@ public class BasicSchedule {
 
         try {
 
-            String fileName = PropertyUtils.getProperty(SysConstant.LOG_PATH) + DateUtils.format(new Date(), "yyyyMMdd") + "/getAllStationNoRoute" + SysConstant.LOG_FILE_SUFFIX;
+            String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getAllStationNoRoute" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + "null", true);
 
             logger.info("parameters: null");
@@ -216,7 +243,7 @@ public class BasicSchedule {
         try {
             RouteRequest routeRequest = RouteRequest.builder().routeId("-1").routeName("-1").build();
 
-            String fileName = PropertyUtils.getProperty(SysConstant.LOG_PATH) + DateUtils.format(new Date(), "yyyyMMdd") + "/getRouteInfo" + SysConstant.LOG_FILE_SUFFIX;
+            String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getRouteInfo" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(routeRequest), true);
             logger.info("parameters:" + JsonUtils.toJson(routeRequest));
 
@@ -244,7 +271,7 @@ public class BasicSchedule {
         try {
             RouteRequest routeRequest = RouteRequest.builder().routeId("284").build();
 
-            String fileName = PropertyUtils.getProperty(SysConstant.LOG_PATH) + DateUtils.format(new Date(), "yyyyMMdd") + "/getSegmentByRoute" + SysConstant.LOG_FILE_SUFFIX;
+            String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getSegmentByRoute" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(routeRequest), true);
             logger.info("parameters:" + JsonUtils.toJson(routeRequest));
 
@@ -272,7 +299,7 @@ public class BasicSchedule {
         try {
             StationRequest stationRequest = StationRequest.builder().stationId("03051164").build();
 
-            String fileName = PropertyUtils.getProperty(SysConstant.LOG_PATH) + DateUtils.format(new Date(), "yyyyMMdd") + "/getRouteByStation" + SysConstant.LOG_FILE_SUFFIX;
+            String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getRouteByStation" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(stationRequest), true);
             logger.info("parameters:" + JsonUtils.toJson(stationRequest));
 
@@ -300,7 +327,7 @@ public class BasicSchedule {
         try {
             SegmentRequest segmentRequest = SegmentRequest.builder().segmentId("2731").build();
 
-            String fileName = PropertyUtils.getProperty(SysConstant.LOG_PATH) + DateUtils.format(new Date(), "yyyyMMdd") + "/getStationBySegment" + SysConstant.LOG_FILE_SUFFIX;
+            String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getStationBySegment" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(segmentRequest), true);
             logger.info("parameters:" + JsonUtils.toJson(segmentRequest));
 
@@ -329,7 +356,7 @@ public class BasicSchedule {
             StationRequest stationRequest = StationRequest.builder().longitude(112.979885).latitude(28.201137)
                     .lonRange(0.011).latRange(0.009).build();
 
-            String fileName = PropertyUtils.getProperty(SysConstant.LOG_PATH) + DateUtils.format(new Date(), "yyyyMMdd") + "/getStationByGps" + SysConstant.LOG_FILE_SUFFIX;
+            String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getStationByGps" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(stationRequest), true);
             logger.info("parameters:" + JsonUtils.toJson(stationRequest));
 

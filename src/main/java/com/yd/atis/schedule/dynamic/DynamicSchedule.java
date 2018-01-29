@@ -12,19 +12,22 @@ import com.yd.atis.service.dynamicService.AtisDynamicWebService_ServiceLocator;
 import com.yd.atis.utils.DateUtils;
 import com.yd.atis.utils.FileUtils;
 import com.yd.atis.utils.JsonUtils;
-import com.yd.atis.utils.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.Random;
 
 /**
+ * Atis动态服务调用
  * @author AsiQue
  * @since :2018.01.29 09:35
  */
+@Component
 public class DynamicSchedule {
     private static Logger logger = LoggerFactory.getLogger(DynamicSchedule.class);
 
@@ -33,12 +36,8 @@ public class DynamicSchedule {
 
     private static AtisDynamicWebService_PortType dynamicService;
 
-    public void run() {
-
-        initService();
-
-        excuteAtisDynamicService();
-    }
+    @Value("${log.path}")
+    private String logPath;
 
     private void initService() {
         try {
@@ -55,30 +54,31 @@ public class DynamicSchedule {
         }
     }
 
-    @Scheduled(cron = "0/3 * * * * ?")
-    private void excuteAtisDynamicService() {
-
-//        initService();
-
-        System.out.printf("dynamic schedule task run ****************************");
+    /**
+     * 定时调度任务 每天22：00调用一次
+     */
+    @Scheduled(cron = "0 0 22 * * ?")
+    public void excuteAtisDynamicService() {
 
         logger.info("Atis dynamic task start!");
 
-//        //按站点查询车辆实时到站信息
-//        queryByStationID();
+        initService();
 
-//        queryByStationID2();
-//
-//        //车辆到站提醒请求
-//        requireBusPosition();
-//
-//        //按线路ID查询线路运行明细
-//        queryDetailByRouteId();
+        //按站点查询车辆实时到站信息
+        queryByStationID();
 
-//        queryDetailByRouteID2();
-//
-//        //查询线路路段速度
-//        requireRouteSpeed();
+        queryByStationID2();
+
+        //车辆到站提醒请求
+        requireBusPosition();
+
+        //按线路ID查询线路运行明细
+        queryDetailByRouteId();
+
+        queryDetailByRouteID2();
+
+        //查询线路路段速度
+        requireRouteSpeed();
 
         logger.info("Atis dynamic task end!");
     }
@@ -92,7 +92,7 @@ public class DynamicSchedule {
         try {
             StationRequest stationRequest = StationRequest.builder().routeId("-1").segmentId("2452").stationId("7072190").build();
 
-            String fileName = PropertyUtils.getProperty(SysConstant.LOG_PATH) + DateUtils.format(new Date(), "yyyyMMdd") + "/queryByStationId" + SysConstant.LOG_FILE_SUFFIX;
+            String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/dynamic/queryByStationId" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(stationRequest), true);
             logger.info("parameters:" + JsonUtils.toJson(stationRequest));
 
@@ -122,7 +122,7 @@ public class DynamicSchedule {
         try {
             StationRequest stationRequest = StationRequest.builder().routeId("-1").segmentId("2452").stationId("7072190").arrLftType(new Random().nextInt(2) + 1).build();
 
-            String fileName = PropertyUtils.getProperty(SysConstant.LOG_PATH) + DateUtils.format(new Date(), "yyyyMMdd") + "/queryByStationID2" + SysConstant.LOG_FILE_SUFFIX;
+            String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/dynamic/queryByStationID2" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(stationRequest), true);
             logger.info("parameters:" + JsonUtils.toJson(stationRequest));
 
@@ -151,7 +151,7 @@ public class DynamicSchedule {
         try {
             StationRequest stationRequest = StationRequest.builder().routeId("245").segmentId("2452").stationId("03051201").build();
 
-            String fileName = PropertyUtils.getProperty(SysConstant.LOG_PATH) + DateUtils.format(new Date(), "yyyyMMdd") + "/requireBusPosition" + SysConstant.LOG_FILE_SUFFIX;
+            String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/dynamic/requireBusPosition" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(stationRequest), true);
             logger.info("parameters:" + JsonUtils.toJson(stationRequest));
 
@@ -180,7 +180,7 @@ public class DynamicSchedule {
         try {
             SegmentRequest segmentRequest = SegmentRequest.builder().routeId("284").segmentId("2842").build();
 
-            String fileName = PropertyUtils.getProperty(SysConstant.LOG_PATH) + DateUtils.format(new Date(), "yyyyMMdd") + "/queryDetailByRouteID" + SysConstant.LOG_FILE_SUFFIX;
+            String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/dynamic/queryDetailByRouteID" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(segmentRequest), true);
             logger.info("parameters:" + JsonUtils.toJson(segmentRequest));
 
@@ -209,7 +209,7 @@ public class DynamicSchedule {
         try {
             SegmentRequest segmentRequest = SegmentRequest.builder().routeId("284").segmentId("2842").arrLftType(new Random().nextInt(2) + 1).build();
 
-            String fileName = PropertyUtils.getProperty(SysConstant.LOG_PATH) + DateUtils.format(new Date(), "yyyyMMdd") + "/queryDetailByRouteID2" + SysConstant.LOG_FILE_SUFFIX;
+            String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/dynamic/queryDetailByRouteID2" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(segmentRequest), true);
             logger.info("parameters:" + JsonUtils.toJson(segmentRequest));
 
@@ -238,7 +238,7 @@ public class DynamicSchedule {
         try {
             SegmentRequest segmentRequest = SegmentRequest.builder().routeId("198").build();
 
-            String fileName = PropertyUtils.getProperty(SysConstant.LOG_PATH) + DateUtils.format(new Date(), "yyyyMMdd") + "/requireRouteSpeed" + SysConstant.LOG_FILE_SUFFIX;
+            String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/dynamic/requireRouteSpeed" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(segmentRequest), true);
             logger.info("parameters:" + JsonUtils.toJson(segmentRequest));
 
