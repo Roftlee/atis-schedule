@@ -34,4 +34,9 @@ public class SegmentRequest implements Serializable {
      * 站点编号
      */
     private String stationId;
+
+    /**
+     * 进站离站 1.进站 2.离站
+     */
+    private Integer arrLftType;
 }

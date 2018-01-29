@@ -57,12 +57,19 @@ public class BasicSchedule {
     private void excuteAtisBasicService() {
 //        initService();
 
-        System.out.printf("schedule task run ****************************");
+        System.out.printf("basic schedule task run ****************************");
 
         logger.info("Atis basic task start!");
 
-//        //查询站点信息
+//        //查询站点信息，关联线路
 //        getStationInfo();
+
+//        //查询站点信息，不关联线路
+//        getStationInfoNoRoute();
+
+//        getAllStation();
+//
+//        getAllStationNoRoute();
 //
 //        //查询线路信息
 //        getRouteInfo();
@@ -84,7 +91,7 @@ public class BasicSchedule {
     }
 
     /**
-     * 查询站点基础信息
+     * 查询站点基础信息，与路线关联
      * @return
      */
     private StationInfoEntity[] getStationInfo() {
@@ -101,6 +108,93 @@ public class BasicSchedule {
 
             //获取站点基础信息
             StationInfoEntity[] stations = basicService.getStationInfo(stationRequest.getStationId(), stationRequest.getStationName(), username, password);
+
+            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stations), true);
+            logger.info("results:" + JsonUtils.toJson(stations));
+
+            return stations;
+        } catch (BusinessException e) {
+            logger.error(e.getMessage());
+        } catch (RemoteException e) {
+            logger.error(e.getMessage());
+        }
+        return null;
+    }
+
+    /**
+     * 查询站点基础信息，不关联路线
+     * @return
+     */
+    private StationInfoEntity[] getStationInfoNoRoute() {
+
+        try {
+            StationRequest stationRequest = StationRequest.builder().stationId("-1").stationName("-1").build();
+
+
+
+            String fileName = PropertyUtils.getProperty(SysConstant.LOG_PATH) + DateUtils.format(new Date(), "yyyyMMdd") + "/getStationInfoNoRoute" + SysConstant.LOG_FILE_SUFFIX;
+            FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(stationRequest), true);
+
+            logger.info("parameters:" + JsonUtils.toJson(stationRequest));
+
+            //获取站点基础信息
+            StationInfoEntity[] stations = basicService.getStationInfoNoRoute(stationRequest.getStationId(), stationRequest.getStationName(), username, password);
+
+            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stations), true);
+            logger.info("results:" + JsonUtils.toJson(stations));
+
+            return stations;
+        } catch (BusinessException e) {
+            logger.error(e.getMessage());
+        } catch (RemoteException e) {
+            logger.error(e.getMessage());
+        }
+        return null;
+    }
+
+    /**
+     * 查询所有站点基础信息，与路线关联
+     * @return
+     */
+    private StationInfoEntity[] getAllStation() {
+
+        try {
+
+            String fileName = PropertyUtils.getProperty(SysConstant.LOG_PATH) + DateUtils.format(new Date(), "yyyyMMdd") + "/getAllStation" + SysConstant.LOG_FILE_SUFFIX;
+            FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + "null", true);
+
+            logger.info("parameters: null");
+
+            //获取站点基础信息
+            StationInfoEntity[] stations = basicService.getAllStation(username, password);
+
+            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stations), true);
+            logger.info("results:" + JsonUtils.toJson(stations));
+
+            return stations;
+        } catch (BusinessException e) {
+            logger.error(e.getMessage());
+        } catch (RemoteException e) {
+            logger.error(e.getMessage());
+        }
+        return null;
+    }
+
+    /**
+     * 查询所有站点基础信息，不与路线关联
+     * @return
+     */
+    private StationInfoEntity[] getAllStationNoRoute() {
+
+        try {
+
+            String fileName = PropertyUtils.getProperty(SysConstant.LOG_PATH) + DateUtils.format(new Date(), "yyyyMMdd") + "/getAllStationNoRoute" + SysConstant.LOG_FILE_SUFFIX;
+            FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + "null", true);
+
+            logger.info("parameters: null");
+
+            //获取站点基础信息
+            StationInfoEntity[] stations = basicService.getAllStationNoRoute(username, password);
 
             FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stations), true);
             logger.info("results:" + JsonUtils.toJson(stations));

@@ -59,4 +59,9 @@ public class StationRequest implements Serializable {
      * 纬度偏移量
      */
     private Double latRange;
+
+    /**
+     * 进站离站 1.进站 2.离站
+     */
+    private Integer arrLftType;
 }
