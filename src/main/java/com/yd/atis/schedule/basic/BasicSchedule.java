@@ -58,9 +58,9 @@ public class BasicSchedule {
     }
 
     /**
-     * 定时调度任务 每天22：00调用一次
+     * 定时调度任务 每天22:10,22:20各调用一次
      */
-    @Scheduled(cron = "0 0 22 * * ?")
+    @Scheduled(cron = "0 10,20 22 * * ?")
     public void excuteAtisBasicService() {
 
         log.info("Atis basic task start!");
@@ -112,7 +112,7 @@ public class BasicSchedule {
             StationInfoEntity[] stations = new StationInfoEntity[1];
 
             FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stations), true);
-            log.info("results:" + JsonUtils.toJson(stations));
+//            log.info("results:" + JsonUtils.toJson(stations));
 
             throw new Exception("this is a manual exception");
 
@@ -127,19 +127,18 @@ public class BasicSchedule {
      */
     private StationInfoEntity[] getStationInfo() {
 
+        log.info("start to excute getStationInfo()");
+
         try {
-            StationRequest stationRequest = StationRequest.builder().stationId("-1").stationName("火车站").build();
+            StationRequest stationRequest = StationRequest.builder().stationName("高升村").build();
 
             String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getStationInfo" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(stationRequest), true);
-
-            log.info("parameters:" + JsonUtils.toJson(stationRequest));
 
             //获取站点基础信息
             StationInfoEntity[] stations = basicService.getStationInfo(stationRequest.getStationId(), stationRequest.getStationName(), username, password);
 
             FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stations), true);
-            log.info("results:" + JsonUtils.toJson(stations));
 
             return stations;
         } catch (BusinessException e) {
@@ -147,6 +146,9 @@ public class BasicSchedule {
         } catch (RemoteException e) {
             log.error(e.getMessage());
         }
+
+        log.info("getStationInfo() end");
+
         return null;
     }
 
@@ -156,19 +158,18 @@ public class BasicSchedule {
      */
     private StationInfoEntity[] getStationInfoNoRoute() {
 
+        log.info("start to excute getStationInfoNoRoute()");
+
         try {
-            StationRequest stationRequest = StationRequest.builder().stationId("-1").stationName("-1").build();
+            StationRequest stationRequest = StationRequest.builder().stationName("高升村").build();
 
             String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getStationInfoNoRoute" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(stationRequest), true);
-
-            log.info("parameters:" + JsonUtils.toJson(stationRequest));
 
             //获取站点基础信息
             StationInfoEntity[] stations = basicService.getStationInfoNoRoute(stationRequest.getStationId(), stationRequest.getStationName(), username, password);
 
             FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stations), true);
-            log.info("results:" + JsonUtils.toJson(stations));
 
             return stations;
         } catch (BusinessException e) {
@@ -176,6 +177,9 @@ public class BasicSchedule {
         } catch (RemoteException e) {
             log.error(e.getMessage());
         }
+
+        log.info("getStationInfoNoRoute() end");
+
         return null;
     }
 
@@ -185,18 +189,17 @@ public class BasicSchedule {
      */
     private StationInfoEntity[] getAllStation() {
 
+        log.info("start to excute getAllStation()");
+
         try {
 
             String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getAllStation" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + "null", true);
 
-            log.info("parameters: null");
-
             //获取站点基础信息
             StationInfoEntity[] stations = basicService.getAllStation(username, password);
 
             FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stations), true);
-            log.info("results:" + JsonUtils.toJson(stations));
 
             return stations;
         } catch (BusinessException e) {
@@ -204,6 +207,9 @@ public class BasicSchedule {
         } catch (RemoteException e) {
             log.error(e.getMessage());
         }
+
+        log.info("getAllStation() end");
+
         return null;
     }
 
@@ -213,18 +219,17 @@ public class BasicSchedule {
      */
     private StationInfoEntity[] getAllStationNoRoute() {
 
+        log.info("start to excute getAllStationNoRoute()");
+
         try {
 
             String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getAllStationNoRoute" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + "null", true);
 
-            log.info("parameters: null");
-
             //获取站点基础信息
             StationInfoEntity[] stations = basicService.getAllStationNoRoute(username, password);
 
             FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stations), true);
-            log.info("results:" + JsonUtils.toJson(stations));
 
             return stations;
         } catch (BusinessException e) {
@@ -232,6 +237,9 @@ public class BasicSchedule {
         } catch (RemoteException e) {
             log.error(e.getMessage());
         }
+
+        log.info("getAllStationNoRoute() end");
+
         return null;
     }
 
@@ -240,18 +248,19 @@ public class BasicSchedule {
      * @return
      */
     private RouteInfoEntity[] getRouteInfo() {
+
+        log.info("start to excute getRouteInfo()");
+
         try {
             RouteRequest routeRequest = RouteRequest.builder().routeId("-1").routeName("-1").build();
 
             String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getRouteInfo" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(routeRequest), true);
-            log.info("parameters:" + JsonUtils.toJson(routeRequest));
 
             //获取线路基础信息
             RouteInfoEntity[] routes = basicService.getRouteInfo(routeRequest.getRouteId(), routeRequest.getRouteName(), username, password);
 
             FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(routes), true);
-            log.info("results:" + JsonUtils.toJson(routes));
 
             return routes;
         } catch (BusinessException e) {
@@ -259,6 +268,8 @@ public class BasicSchedule {
         } catch (RemoteException e) {
             log.error(e.getMessage());
         }
+
+        log.info("getRouteInfo() end");
 
         return null;
     }
@@ -268,18 +279,19 @@ public class BasicSchedule {
      * @return
      */
     private SegmentInfoEntity[] getSegmentByRoute() {
+
+        log.info("start to excute getSegmentByRoute()");
+
         try {
             RouteRequest routeRequest = RouteRequest.builder().routeId("284").build();
 
             String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getSegmentByRoute" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(routeRequest), true);
-            log.info("parameters:" + JsonUtils.toJson(routeRequest));
 
             //获取某一线路的单程信息
             SegmentInfoEntity[] segments = basicService.getSegmentByRoute(routeRequest.getRouteId(), username, password);
 
             FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(segments), true);
-            log.info("results:" + JsonUtils.toJson(segments));
 
             return segments;
         } catch (BusinessException e) {
@@ -287,6 +299,8 @@ public class BasicSchedule {
         } catch (RemoteException e) {
             log.error(e.getMessage());
         }
+
+        log.info("getSegmentByRoute() end");
 
         return null;
     }
@@ -296,18 +310,19 @@ public class BasicSchedule {
      * @return
      */
     private RouteInfoEntity[] getRouteByStation() {
+
+        log.info("start to excute getRouteByStation()");
+
         try {
             StationRequest stationRequest = StationRequest.builder().stationId("03051164").build();
 
             String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getRouteByStation" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(stationRequest), true);
-            log.info("parameters:" + JsonUtils.toJson(stationRequest));
 
             //获取经过某一站点的线路信息
             RouteInfoEntity[] routes = basicService.getRouteByStation(stationRequest.getStationId(), username, password);
 
             FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(routes), true);
-            log.info("results:" + JsonUtils.toJson(routes));
 
             return routes;
         } catch (BusinessException e) {
@@ -315,6 +330,8 @@ public class BasicSchedule {
         } catch (RemoteException e) {
             log.error(e.getMessage());
         }
+
+        log.info("getRouteByStation() end");
 
         return null;
     }
@@ -324,18 +341,19 @@ public class BasicSchedule {
      * @return
      */
     private StationInfoEntity[] getStationBySegment() {
+
+        log.info("start to excute getStationBySegment()");
+
         try {
             SegmentRequest segmentRequest = SegmentRequest.builder().segmentId("2731").build();
 
             String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getStationBySegment" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(segmentRequest), true);
-            log.info("parameters:" + JsonUtils.toJson(segmentRequest));
 
             //根据单程获取站点信息
             StationInfoEntity[] stations = basicService.getStationBySegment(segmentRequest.getSegmentId(), username, password);
 
             FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stations), true);
-            log.info("results:" + JsonUtils.toJson(stations));
 
             return stations;
         } catch (BusinessException e) {
@@ -343,6 +361,8 @@ public class BasicSchedule {
         } catch (RemoteException e) {
             log.error(e.getMessage());
         }
+
+        log.info("getStationBySegment() end");
 
         return null;
     }
@@ -352,20 +372,21 @@ public class BasicSchedule {
      * @return
      */
     private StationInfoEntity[] getStationByGps() {
+
+        log.info("start to excute getStationByGps()");
+
         try {
             StationRequest stationRequest = StationRequest.builder().longitude(112.979885).latitude(28.201137)
                     .lonRange(0.011).latRange(0.009).build();
 
             String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getStationByGps" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(stationRequest), true);
-            log.info("parameters:" + JsonUtils.toJson(stationRequest));
 
             //查询附近的站点
             StationInfoEntity[] stations = basicService.getStationByGps(stationRequest.getLongitude(),
                     stationRequest.getLatitude(), stationRequest.getLonRange(), stationRequest.getLatRange(), 1000D, username, password);
 
             FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stations), true);
-            log.info("results:" + JsonUtils.toJson(stations));
 
             return stations;
         } catch (BusinessException e) {
@@ -373,6 +394,8 @@ public class BasicSchedule {
         } catch (RemoteException e) {
             log.error(e.getMessage());
         }
+
+        log.info("getStationByGps() end");
 
         return null;
     }
