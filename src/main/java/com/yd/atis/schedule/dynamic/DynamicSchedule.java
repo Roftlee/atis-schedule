@@ -1,6 +1,7 @@
 package com.yd.atis.schedule.dynamic;
 
 import com.yd.atis.constant.SysConstant;
+import com.yd.atis.facade.mail.MailFacade;
 import com.yd.atis.model.ArriveStationBusEntity;
 import com.yd.atis.model.BusinessException;
 import com.yd.atis.model.RealTimeInfo;
@@ -14,6 +15,7 @@ import com.yd.atis.utils.FileUtils;
 import com.yd.atis.utils.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -38,6 +40,9 @@ public class DynamicSchedule {
     @Value("${logback.logdir}")
     private String logPath;
 
+    @Autowired
+    private MailFacade mailFacade;
+
     private void initService() {
         try {
 
@@ -54,9 +59,9 @@ public class DynamicSchedule {
     }
 
     /**
-     * 定时调度任务 每天22:15和22:25各调用一次
+     * 定时调度任务 每天9点到18点之间每30分钟调用一次
      */
-    @Scheduled(cron = "0 15,25 22 * * ?")
+    @Scheduled(cron = "0 0/30 9-18 * * ?")
     public void excuteAtisDynamicService() {
 
         log.info("Atis dynamic task start!");
@@ -94,23 +99,33 @@ public class DynamicSchedule {
         try {
             StationRequest stationRequest = StationRequest.builder().routeId("-1").segmentId("").stationId("7072190").build();
 
-            String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/dynamic/queryByStationId" + SysConstant.LOG_FILE_SUFFIX;
+            String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/dynamic/queryByStationID" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(stationRequest), true);
 
             //按站点唯一编号查询
             ArriveStationBusEntity[] arriveStationBusEntities = dynamicService.queryByStationID(
                     stationRequest.getRouteId(), stationRequest.getSegmentId(), stationRequest.getStationId(), username, password);
 
+            if (arriveStationBusEntities == null || arriveStationBusEntities.length == 0) {
+                mailFacade.sendSimpleEmail("queryByStationID接口返回null", "queryByStationID接口返回null，请求参数：" + JsonUtils.toJson(stationRequest));
+            }
+
             FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(arriveStationBusEntities), true);
+
+            log.info("queryByStationID() end");
 
             return arriveStationBusEntities;
         } catch (BusinessException e) {
+            log.info("queryByStationID() error");
             log.error(e.getMessage());
-        } catch (RemoteException e) {
-            log.error(e.getMessage());
-        }
 
-        log.info("queryByStationID() end");
+            mailFacade.sendSimpleEmail("queryByStationID接口请求异常", "异常信息：" + e.getStackTrace());
+        } catch (RemoteException e) {
+            log.info("queryByStationID() error");
+            log.error(e.getMessage());
+
+            mailFacade.sendSimpleEmail("queryByStationID接口请求异常", "异常信息：" + e.getStackTrace());
+        }
 
         return null;
     }
@@ -134,16 +149,26 @@ public class DynamicSchedule {
             ArriveStationBusEntity[] arriveStationBusEntities = dynamicService.queryByStationID2(
                     stationRequest.getRouteId(), stationRequest.getSegmentId(), stationRequest.getStationId(), stationRequest.getArrLftType(), username, password);
 
+            if (arriveStationBusEntities == null || arriveStationBusEntities.length == 0) {
+                mailFacade.sendSimpleEmail("queryByStationID2接口返回null", "queryByStationID2接口返回null，请求参数：" + JsonUtils.toJson(stationRequest));
+            }
+
             FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(arriveStationBusEntities), true);
+
+            log.info("queryByStationID2() end");
 
             return arriveStationBusEntities;
         } catch (BusinessException e) {
+            log.info("queryByStationID2() error");
             log.error(e.getMessage());
-        } catch (RemoteException e) {
-            log.error(e.getMessage());
-        }
 
-        log.info("queryByStationID2() end");
+            mailFacade.sendSimpleEmail("queryByStationID2接口请求异常", "异常信息：" + e.getStackTrace());
+        } catch (RemoteException e) {
+            log.info("queryByStationID2() error");
+            log.error(e.getMessage());
+
+            mailFacade.sendSimpleEmail("queryByStationID2接口请求异常", "异常信息：" + e.getStackTrace());
+        }
 
         return null;
     }
@@ -166,16 +191,26 @@ public class DynamicSchedule {
             ArriveStationBusEntity[] requireBusPositions = dynamicService.requireBusPosition(
                     stationRequest.getRouteId(), stationRequest.getSegmentId(), stationRequest.getStationId(), username, password);
 
+            if (requireBusPositions == null || requireBusPositions.length == 0) {
+                mailFacade.sendSimpleEmail("requireBusPosition接口返回null", "requireBusPosition接口返回null，请求参数：" + JsonUtils.toJson(stationRequest));
+            }
+
             FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(requireBusPositions), true);
+
+            log.info("requireBusPosition() end");
 
             return requireBusPositions;
         } catch (BusinessException e) {
+            log.info("requireBusPosition() error");
             log.error(e.getMessage());
-        } catch (RemoteException e) {
-            log.error(e.getMessage());
-        }
 
-        log.info("requireBusPosition() end");
+            mailFacade.sendSimpleEmail("requireBusPosition接口请求异常", "异常信息：" + e.getStackTrace());
+        } catch (RemoteException e) {
+            log.info("requireBusPosition() error");
+            log.error(e.getMessage());
+
+            mailFacade.sendSimpleEmail("requireBusPosition接口请求异常", "异常信息：" + e.getStackTrace());
+        }
 
         return null;
     }
@@ -198,16 +233,26 @@ public class DynamicSchedule {
             RealTimeInfo[] realTimeInfos = dynamicService.queryDetailByRouteID(
                     segmentRequest.getRouteId(), segmentRequest.getStationId(), segmentRequest.getSegmentId(), username, password);
 
+            if (realTimeInfos == null || realTimeInfos.length == 0) {
+                mailFacade.sendSimpleEmail("queryDetailByRouteId接口返回null", "queryDetailByRouteId接口返回null，请求参数：" + JsonUtils.toJson(segmentRequest));
+            }
+
             FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(realTimeInfos), true);
+
+            log.info("queryDetailByRouteId() end");
 
             return realTimeInfos;
         } catch (BusinessException e) {
+            log.info("queryDetailByRouteId() error");
             log.error(e.getMessage());
-        } catch (RemoteException e) {
-            log.error(e.getMessage());
-        }
 
-        log.info("queryDetailByRouteId() end");
+            mailFacade.sendSimpleEmail("queryDetailByRouteId接口请求异常", "异常信息：" + e.getStackTrace());
+        } catch (RemoteException e) {
+            log.info("queryDetailByRouteId() error");
+            log.error(e.getMessage());
+
+            mailFacade.sendSimpleEmail("queryDetailByRouteId接口请求异常", "异常信息：" + e.getStackTrace());
+        }
 
         return null;
     }
@@ -230,16 +275,26 @@ public class DynamicSchedule {
             RealTimeInfo[] realTimeInfos = dynamicService.queryDetailByRouteID2(
                     segmentRequest.getRouteId(), segmentRequest.getStationId(), segmentRequest.getSegmentId(), segmentRequest.getArrLftType(), username, password);
 
+            if (realTimeInfos == null || realTimeInfos.length == 0) {
+                mailFacade.sendSimpleEmail("queryDetailByRouteID2接口返回null", "queryDetailByRouteID2接口返回null，请求参数：" + JsonUtils.toJson(segmentRequest));
+            }
+
             FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(realTimeInfos), true);
+
+            log.info("queryDetailByRouteID2() end");
 
             return realTimeInfos;
         } catch (BusinessException e) {
+            log.info("queryDetailByRouteID2() error");
             log.error(e.getMessage());
-        } catch (RemoteException e) {
-            log.error(e.getMessage());
-        }
 
-        log.info("queryDetailByRouteID2() end");
+            mailFacade.sendSimpleEmail("queryDetailByRouteID2接口请求异常", "异常信息：" + e.getStackTrace());
+        } catch (RemoteException e) {
+            log.info("queryDetailByRouteID2() error");
+            log.error(e.getMessage());
+
+            mailFacade.sendSimpleEmail("queryDetailByRouteID2接口请求异常", "异常信息：" + e.getStackTrace());
+        }
 
         return null;
     }
@@ -262,16 +317,26 @@ public class DynamicSchedule {
             StationInfoEntity[] stationInfoEntities =
                     dynamicService.requireRouteSpeed(segmentRequest.getRouteId(), username, password);
 
+            if (stationInfoEntities == null || stationInfoEntities.length == 0) {
+                mailFacade.sendSimpleEmail("requireRouteSpeed接口返回null", "requireRouteSpeed接口返回null，请求参数：" + JsonUtils.toJson(segmentRequest));
+            }
+
             FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stationInfoEntities), true);
+
+            log.info("requireRouteSpeed() end");
 
             return stationInfoEntities;
         } catch (BusinessException e) {
+            log.info("requireRouteSpeed() error");
             log.error(e.getMessage());
-        } catch (RemoteException e) {
-            log.error(e.getMessage());
-        }
 
-        log.info("requireRouteSpeed() end");
+            mailFacade.sendSimpleEmail("requireRouteSpeed接口请求异常", "异常信息：" + e.getStackTrace());
+        } catch (RemoteException e) {
+            log.info("requireRouteSpeed() error");
+            log.error(e.getMessage());
+
+            mailFacade.sendSimpleEmail("requireRouteSpeed接口请求异常", "异常信息：" + e.getStackTrace());
+        }
 
         return null;
     }
