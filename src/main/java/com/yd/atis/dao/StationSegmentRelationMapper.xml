@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yd.atis.dao.StationSegmentRelationMapper" >
+  <resultMap id="BaseResultMap" type="com.yd.atis.dto.StationSegmentRelation" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="station_id" property="stationId" jdbcType="VARCHAR" />
+    <result column="station_no" property="stationNo" jdbcType="VARCHAR" />
+    <result column="route_id" property="routeId" jdbcType="VARCHAR" />
+    <result column="segment_id" property="segmentId" jdbcType="VARCHAR" />
+    <result column="sng_serial_id" property="sngSerialId" jdbcType="DOUBLE" />
+    <result column="dual_serial_id" property="dualSerialId" jdbcType="DOUBLE" />
+    <result column="distance" property="distance" jdbcType="DOUBLE" />
+    <result column="next_sta_no" property="nextStaNo" jdbcType="VARCHAR" />
+    <result column="send_speed" property="sendSpeed" jdbcType="DOUBLE" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, station_id, station_no, route_id, segment_id, sng_serial_id, dual_serial_id, 
+    distance, next_sta_no, send_speed, created_time, updated_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from station_segment_relation
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from station_segment_relation
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yd.atis.dto.StationSegmentRelation" >
+    insert into station_segment_relation (id, station_id, station_no, 
+      route_id, segment_id, sng_serial_id, 
+      dual_serial_id, distance, next_sta_no, 
+      send_speed, created_time, updated_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{stationId,jdbcType=VARCHAR}, #{stationNo,jdbcType=VARCHAR}, 
+      #{routeId,jdbcType=VARCHAR}, #{segmentId,jdbcType=VARCHAR}, #{sngSerialId,jdbcType=DOUBLE}, 
+      #{dualSerialId,jdbcType=DOUBLE}, #{distance,jdbcType=DOUBLE}, #{nextStaNo,jdbcType=VARCHAR}, 
+      #{sendSpeed,jdbcType=DOUBLE}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yd.atis.dto.StationSegmentRelation" >
+    insert into station_segment_relation
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="stationId != null" >
+        station_id,
+      </if>
+      <if test="stationNo != null" >
+        station_no,
+      </if>
+      <if test="routeId != null" >
+        route_id,
+      </if>
+      <if test="segmentId != null" >
+        segment_id,
+      </if>
+      <if test="sngSerialId != null" >
+        sng_serial_id,
+      </if>
+      <if test="dualSerialId != null" >
+        dual_serial_id,
+      </if>
+      <if test="distance != null" >
+        distance,
+      </if>
+      <if test="nextStaNo != null" >
+        next_sta_no,
+      </if>
+      <if test="sendSpeed != null" >
+        send_speed,
+      </if>
+      <if test="createdTime != null" >
+        created_time,
+      </if>
+      <if test="updatedTime != null" >
+        updated_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="stationId != null" >
+        #{stationId,jdbcType=VARCHAR},
+      </if>
+      <if test="stationNo != null" >
+        #{stationNo,jdbcType=VARCHAR},
+      </if>
+      <if test="routeId != null" >
+        #{routeId,jdbcType=VARCHAR},
+      </if>
+      <if test="segmentId != null" >
+        #{segmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="sngSerialId != null" >
+        #{sngSerialId,jdbcType=DOUBLE},
+      </if>
+      <if test="dualSerialId != null" >
+        #{dualSerialId,jdbcType=DOUBLE},
+      </if>
+      <if test="distance != null" >
+        #{distance,jdbcType=DOUBLE},
+      </if>
+      <if test="nextStaNo != null" >
+        #{nextStaNo,jdbcType=VARCHAR},
+      </if>
+      <if test="sendSpeed != null" >
+        #{sendSpeed,jdbcType=DOUBLE},
+      </if>
+      <if test="createdTime != null" >
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null" >
+        #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yd.atis.dto.StationSegmentRelation" >
+    update station_segment_relation
+    <set >
+      <if test="stationId != null" >
+        station_id = #{stationId,jdbcType=VARCHAR},
+      </if>
+      <if test="stationNo != null" >
+        station_no = #{stationNo,jdbcType=VARCHAR},
+      </if>
+      <if test="routeId != null" >
+        route_id = #{routeId,jdbcType=VARCHAR},
+      </if>
+      <if test="segmentId != null" >
+        segment_id = #{segmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="sngSerialId != null" >
+        sng_serial_id = #{sngSerialId,jdbcType=DOUBLE},
+      </if>
+      <if test="dualSerialId != null" >
+        dual_serial_id = #{dualSerialId,jdbcType=DOUBLE},
+      </if>
+      <if test="distance != null" >
+        distance = #{distance,jdbcType=DOUBLE},
+      </if>
+      <if test="nextStaNo != null" >
+        next_sta_no = #{nextStaNo,jdbcType=VARCHAR},
+      </if>
+      <if test="sendSpeed != null" >
+        send_speed = #{sendSpeed,jdbcType=DOUBLE},
+      </if>
+      <if test="createdTime != null" >
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null" >
+        updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yd.atis.dto.StationSegmentRelation" >
+    update station_segment_relation
+    set station_id = #{stationId,jdbcType=VARCHAR},
+      station_no = #{stationNo,jdbcType=VARCHAR},
+      route_id = #{routeId,jdbcType=VARCHAR},
+      segment_id = #{segmentId,jdbcType=VARCHAR},
+      sng_serial_id = #{sngSerialId,jdbcType=DOUBLE},
+      dual_serial_id = #{dualSerialId,jdbcType=DOUBLE},
+      distance = #{distance,jdbcType=DOUBLE},
+      next_sta_no = #{nextStaNo,jdbcType=VARCHAR},
+      send_speed = #{sendSpeed,jdbcType=DOUBLE},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <select id="selectByRandom" resultMap="BaseResultMap">
+        select * from station_segment_relation order by RAND() LIMIT 1
+    </select>
+</mapper>

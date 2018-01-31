@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yd.atis.dao.SegmentInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.yd.atis.dto.SegmentInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="segment_id" property="segmentId" jdbcType="VARCHAR" />
+    <result column="route_id" property="routeId" jdbcType="VARCHAR" />
+    <result column="segment_name" property="segmentName" jdbcType="VARCHAR" />
+    <result column="sub_route_id" property="subRouteId" jdbcType="VARCHAR" />
+    <result column="sub_route_name" property="subRouteName" jdbcType="VARCHAR" />
+    <result column="run_direction" property="runDirection" jdbcType="TINYINT" />
+    <result column="fst_send_time" property="fstSendTime" jdbcType="VARCHAR" />
+    <result column="lst_send_time" property="lstSendTime" jdbcType="VARCHAR" />
+    <result column="sng_mile" property="sngMile" jdbcType="DOUBLE" />
+    <result column="sng_time" property="sngTime" jdbcType="DOUBLE" />
+    <result column="fst_station_id" property="fstStationId" jdbcType="VARCHAR" />
+    <result column="lst_station_id" property="lstStationId" jdbcType="VARCHAR" />
+    <result column="station_num" property="stationNum" jdbcType="INTEGER" />
+    <result column="fst_station_name" property="fstStationName" jdbcType="VARCHAR" />
+    <result column="lst_station_name" property="lstStationName" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, segment_id, route_id, segment_name, sub_route_id, sub_route_name, run_direction, 
+    fst_send_time, lst_send_time, sng_mile, sng_time, fst_station_id, lst_station_id, 
+    station_num, fst_station_name, lst_station_name, created_time, updated_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from segment_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from segment_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yd.atis.dto.SegmentInfo" >
+    insert into segment_info (id, segment_id, route_id, 
+      segment_name, sub_route_id, sub_route_name, 
+      run_direction, fst_send_time, lst_send_time, 
+      sng_mile, sng_time, fst_station_id, 
+      lst_station_id, station_num, fst_station_name, 
+      lst_station_name, created_time, updated_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{segmentId,jdbcType=VARCHAR}, #{routeId,jdbcType=VARCHAR}, 
+      #{segmentName,jdbcType=VARCHAR}, #{subRouteId,jdbcType=VARCHAR}, #{subRouteName,jdbcType=VARCHAR}, 
+      #{runDirection,jdbcType=TINYINT}, #{fstSendTime,jdbcType=VARCHAR}, #{lstSendTime,jdbcType=VARCHAR}, 
+      #{sngMile,jdbcType=DOUBLE}, #{sngTime,jdbcType=DOUBLE}, #{fstStationId,jdbcType=VARCHAR}, 
+      #{lstStationId,jdbcType=VARCHAR}, #{stationNum,jdbcType=INTEGER}, #{fstStationName,jdbcType=VARCHAR}, 
+      #{lstStationName,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yd.atis.dto.SegmentInfo" >
+    insert into segment_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="segmentId != null" >
+        segment_id,
+      </if>
+      <if test="routeId != null" >
+        route_id,
+      </if>
+      <if test="segmentName != null" >
+        segment_name,
+      </if>
+      <if test="subRouteId != null" >
+        sub_route_id,
+      </if>
+      <if test="subRouteName != null" >
+        sub_route_name,
+      </if>
+      <if test="runDirection != null" >
+        run_direction,
+      </if>
+      <if test="fstSendTime != null" >
+        fst_send_time,
+      </if>
+      <if test="lstSendTime != null" >
+        lst_send_time,
+      </if>
+      <if test="sngMile != null" >
+        sng_mile,
+      </if>
+      <if test="sngTime != null" >
+        sng_time,
+      </if>
+      <if test="fstStationId != null" >
+        fst_station_id,
+      </if>
+      <if test="lstStationId != null" >
+        lst_station_id,
+      </if>
+      <if test="stationNum != null" >
+        station_num,
+      </if>
+      <if test="fstStationName != null" >
+        fst_station_name,
+      </if>
+      <if test="lstStationName != null" >
+        lst_station_name,
+      </if>
+      <if test="createdTime != null" >
+        created_time,
+      </if>
+      <if test="updatedTime != null" >
+        updated_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="segmentId != null" >
+        #{segmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="routeId != null" >
+        #{routeId,jdbcType=VARCHAR},
+      </if>
+      <if test="segmentName != null" >
+        #{segmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="subRouteId != null" >
+        #{subRouteId,jdbcType=VARCHAR},
+      </if>
+      <if test="subRouteName != null" >
+        #{subRouteName,jdbcType=VARCHAR},
+      </if>
+      <if test="runDirection != null" >
+        #{runDirection,jdbcType=TINYINT},
+      </if>
+      <if test="fstSendTime != null" >
+        #{fstSendTime,jdbcType=VARCHAR},
+      </if>
+      <if test="lstSendTime != null" >
+        #{lstSendTime,jdbcType=VARCHAR},
+      </if>
+      <if test="sngMile != null" >
+        #{sngMile,jdbcType=DOUBLE},
+      </if>
+      <if test="sngTime != null" >
+        #{sngTime,jdbcType=DOUBLE},
+      </if>
+      <if test="fstStationId != null" >
+        #{fstStationId,jdbcType=VARCHAR},
+      </if>
+      <if test="lstStationId != null" >
+        #{lstStationId,jdbcType=VARCHAR},
+      </if>
+      <if test="stationNum != null" >
+        #{stationNum,jdbcType=INTEGER},
+      </if>
+      <if test="fstStationName != null" >
+        #{fstStationName,jdbcType=VARCHAR},
+      </if>
+      <if test="lstStationName != null" >
+        #{lstStationName,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null" >
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null" >
+        #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yd.atis.dto.SegmentInfo" >
+    update segment_info
+    <set >
+      <if test="segmentId != null" >
+        segment_id = #{segmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="routeId != null" >
+        route_id = #{routeId,jdbcType=VARCHAR},
+      </if>
+      <if test="segmentName != null" >
+        segment_name = #{segmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="subRouteId != null" >
+        sub_route_id = #{subRouteId,jdbcType=VARCHAR},
+      </if>
+      <if test="subRouteName != null" >
+        sub_route_name = #{subRouteName,jdbcType=VARCHAR},
+      </if>
+      <if test="runDirection != null" >
+        run_direction = #{runDirection,jdbcType=TINYINT},
+      </if>
+      <if test="fstSendTime != null" >
+        fst_send_time = #{fstSendTime,jdbcType=VARCHAR},
+      </if>
+      <if test="lstSendTime != null" >
+        lst_send_time = #{lstSendTime,jdbcType=VARCHAR},
+      </if>
+      <if test="sngMile != null" >
+        sng_mile = #{sngMile,jdbcType=DOUBLE},
+      </if>
+      <if test="sngTime != null" >
+        sng_time = #{sngTime,jdbcType=DOUBLE},
+      </if>
+      <if test="fstStationId != null" >
+        fst_station_id = #{fstStationId,jdbcType=VARCHAR},
+      </if>
+      <if test="lstStationId != null" >
+        lst_station_id = #{lstStationId,jdbcType=VARCHAR},
+      </if>
+      <if test="stationNum != null" >
+        station_num = #{stationNum,jdbcType=INTEGER},
+      </if>
+      <if test="fstStationName != null" >
+        fst_station_name = #{fstStationName,jdbcType=VARCHAR},
+      </if>
+      <if test="lstStationName != null" >
+        lst_station_name = #{lstStationName,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null" >
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null" >
+        updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yd.atis.dto.SegmentInfo" >
+    update segment_info
+    set segment_id = #{segmentId,jdbcType=VARCHAR},
+      route_id = #{routeId,jdbcType=VARCHAR},
+      segment_name = #{segmentName,jdbcType=VARCHAR},
+      sub_route_id = #{subRouteId,jdbcType=VARCHAR},
+      sub_route_name = #{subRouteName,jdbcType=VARCHAR},
+      run_direction = #{runDirection,jdbcType=TINYINT},
+      fst_send_time = #{fstSendTime,jdbcType=VARCHAR},
+      lst_send_time = #{lstSendTime,jdbcType=VARCHAR},
+      sng_mile = #{sngMile,jdbcType=DOUBLE},
+      sng_time = #{sngTime,jdbcType=DOUBLE},
+      fst_station_id = #{fstStationId,jdbcType=VARCHAR},
+      lst_station_id = #{lstStationId,jdbcType=VARCHAR},
+      station_num = #{stationNum,jdbcType=INTEGER},
+      fst_station_name = #{fstStationName,jdbcType=VARCHAR},
+      lst_station_name = #{lstStationName,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <select id="selectByRandom" resultMap="BaseResultMap">
+        select * from segment_info order by RAND() LIMIT 1
+    </select>
+</mapper>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yd.atis.dao.RouteInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.yd.atis.dto.RouteInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="route_id" property="routeId" jdbcType="VARCHAR" />
+    <result column="route_name" property="routeName" jdbcType="VARCHAR" />
+    <result column="route_price" property="routePrice" jdbcType="DOUBLE" />
+    <result column="route_style" property="routeStyle" jdbcType="TINYINT" />
+    <result column="route_info" property="routeInfo" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, route_id, route_name, route_price, route_style, route_info, created_time, updated_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from route_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from route_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yd.atis.dto.RouteInfo" >
+    insert into route_info (id, route_id, route_name, 
+      route_price, route_style, route_info, 
+      created_time, updated_time)
+    values (#{id,jdbcType=INTEGER}, #{routeId,jdbcType=VARCHAR}, #{routeName,jdbcType=VARCHAR}, 
+      #{routePrice,jdbcType=DOUBLE}, #{routeStyle,jdbcType=TINYINT}, #{routeInfo,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yd.atis.dto.RouteInfo" >
+    insert into route_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="routeId != null" >
+        route_id,
+      </if>
+      <if test="routeName != null" >
+        route_name,
+      </if>
+      <if test="routePrice != null" >
+        route_price,
+      </if>
+      <if test="routeStyle != null" >
+        route_style,
+      </if>
+      <if test="routeInfo != null" >
+        route_info,
+      </if>
+      <if test="createdTime != null" >
+        created_time,
+      </if>
+      <if test="updatedTime != null" >
+        updated_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="routeId != null" >
+        #{routeId,jdbcType=VARCHAR},
+      </if>
+      <if test="routeName != null" >
+        #{routeName,jdbcType=VARCHAR},
+      </if>
+      <if test="routePrice != null" >
+        #{routePrice,jdbcType=DOUBLE},
+      </if>
+      <if test="routeStyle != null" >
+        #{routeStyle,jdbcType=TINYINT},
+      </if>
+      <if test="routeInfo != null" >
+        #{routeInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null" >
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null" >
+        #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yd.atis.dto.RouteInfo" >
+    update route_info
+    <set >
+      <if test="routeId != null" >
+        route_id = #{routeId,jdbcType=VARCHAR},
+      </if>
+      <if test="routeName != null" >
+        route_name = #{routeName,jdbcType=VARCHAR},
+      </if>
+      <if test="routePrice != null" >
+        route_price = #{routePrice,jdbcType=DOUBLE},
+      </if>
+      <if test="routeStyle != null" >
+        route_style = #{routeStyle,jdbcType=TINYINT},
+      </if>
+      <if test="routeInfo != null" >
+        route_info = #{routeInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null" >
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null" >
+        updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yd.atis.dto.RouteInfo" >
+    update route_info
+    set route_id = #{routeId,jdbcType=VARCHAR},
+      route_name = #{routeName,jdbcType=VARCHAR},
+      route_price = #{routePrice,jdbcType=DOUBLE},
+      route_style = #{routeStyle,jdbcType=TINYINT},
+      route_info = #{routeInfo,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <select id="selectByRandom" resultMap="BaseResultMap">
+        select * from route_info order by RAND() LIMIT 1
+    </select>
+</mapper>

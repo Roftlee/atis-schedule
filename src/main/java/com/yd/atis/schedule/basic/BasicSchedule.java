@@ -1,6 +1,13 @@
 package com.yd.atis.schedule.basic;
 
 import com.yd.atis.constant.SysConstant;
+import com.yd.atis.dao.RouteInfoMapper;
+import com.yd.atis.dao.SegmentInfoMapper;
+import com.yd.atis.dao.StationInfoMapper;
+import com.yd.atis.dao.StationSegmentRelationMapper;
+import com.yd.atis.dto.RouteInfo;
+import com.yd.atis.dto.SegmentInfo;
+import com.yd.atis.dto.StationInfo;
 import com.yd.atis.facade.mail.MailFacade;
 import com.yd.atis.model.BusinessException;
 import com.yd.atis.model.RouteInfoEntity;
@@ -11,7 +18,6 @@ import com.yd.atis.request.segment.SegmentRequest;
 import com.yd.atis.request.station.StationRequest;
 import com.yd.atis.service.basicService.AtisBasicWebService_PortType;
 import com.yd.atis.service.basicService.AtisBasicWebService_ServiceLocator;
-import com.yd.atis.service.mail.MailFacadeImpl;
 import com.yd.atis.utils.DateUtils;
 import com.yd.atis.utils.FileUtils;
 import com.yd.atis.utils.JsonUtils;
@@ -37,7 +43,6 @@ public class BasicSchedule {
 
     private static String username = "D3DDAD5ECF6D0E87";
     private static String password = "6D8A217D88AFBE9F";
-    private static String fileName = "";
 
     private static AtisBasicWebService_PortType basicService;
 
@@ -46,6 +51,15 @@ public class BasicSchedule {
 
     @Autowired
     private MailFacade mailFacade;
+
+    @Autowired
+    private RouteInfoMapper routeInfoMapper;
+
+    @Autowired
+    private SegmentInfoMapper segmentInfoMapper;
+
+    @Autowired
+    private StationInfoMapper stationInfoMapper;
 
     private void initService() {
         try {
@@ -102,38 +116,6 @@ public class BasicSchedule {
 
     }
 
-//    @Scheduled(cron = "*/10 * * * * ?")
-    private void test() {
-        try {
-            log.info("start to excute test()");
-
-            StationRequest stationRequest = StationRequest.builder().stationId("-1").stationName("火车站").build();
-
-            String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getStationInfo" + SysConstant.LOG_FILE_SUFFIX;
-            FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(stationRequest), true);
-
-            //获取站点基础信息
-            StationInfoEntity[] stations = new StationInfoEntity[0];
-
-            if (stations == null || stations.length == 0) {
-                mailFacade.sendSimpleEmail("test方法返回null", "test方法返回null，请求参数：" + JsonUtils.toJson(stationRequest));
-            }
-
-            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stations), true);
-
-
-            log.info("excute test() end");
-
-            throw new Exception("this is a manual exception");
-
-        } catch (Exception e) {
-            log.info("excute test() error");
-            log.error(e.getMessage());
-
-            mailFacade.sendSimpleEmail("test方法请求异常", "异常信息：" + e.getStackTrace());
-        }
-    }
-
     /**
      * 查询站点基础信息，与路线关联
      * @return
@@ -143,7 +125,10 @@ public class BasicSchedule {
         log.info("start to excute getStationInfo()");
 
         try {
-            StationRequest stationRequest = StationRequest.builder().stationName("高升村").build();
+
+            StationInfo stationInfo = stationInfoMapper.selectByRandom();
+
+            StationRequest stationRequest = StationRequest.builder().stationName(stationInfo.getStationName()).build();
 
             String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getStationInfo" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(stationRequest), true);
@@ -164,12 +149,12 @@ public class BasicSchedule {
             log.info("getStationInfo() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("getStationInfo接口请求异常", "异常信息：" + e.getStackTrace());
+            mailFacade.sendSimpleEmail("getStationInfo接口请求异常", "异常信息：" + e.getMessage());
         } catch (RemoteException e) {
             log.info("getStationInfo() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("getStationInfo接口请求异常", "异常信息：" + e.getStackTrace());
+            mailFacade.sendSimpleEmail("getStationInfo接口请求异常", "异常信息：" + e.getMessage());
         }
 
         return null;
@@ -184,7 +169,9 @@ public class BasicSchedule {
         log.info("start to excute getStationInfoNoRoute()");
 
         try {
-            StationRequest stationRequest = StationRequest.builder().stationName("高升村").build();
+            StationInfo stationInfo = stationInfoMapper.selectByRandom();
+
+            StationRequest stationRequest = StationRequest.builder().stationName(stationInfo.getStationName()).build();
 
             String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getStationInfoNoRoute" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(stationRequest), true);
@@ -205,12 +192,12 @@ public class BasicSchedule {
             log.info("getStationInfoNoRoute() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("getStationInfoNoRoute接口请求异常", "异常信息：" + e.getStackTrace());
+            mailFacade.sendSimpleEmail("getStationInfoNoRoute接口请求异常", "异常信息：" + e.getMessage());
         } catch (RemoteException e) {
             log.info("getStationInfoNoRoute() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("getStationInfoNoRoute接口请求异常", "异常信息：" + e.getStackTrace());
+            mailFacade.sendSimpleEmail("getStationInfoNoRoute接口请求异常", "异常信息：" + e.getMessage());
         }
 
         return null;
@@ -245,12 +232,12 @@ public class BasicSchedule {
             log.info("getAllStation() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("getAllStation接口请求异常", "异常信息：" + e.getStackTrace());
+            mailFacade.sendSimpleEmail("getAllStation接口请求异常", "异常信息：" + e.getMessage());
         } catch (RemoteException e) {
             log.info("getAllStation() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("getAllStation接口请求异常", "异常信息：" + e.getStackTrace());
+            mailFacade.sendSimpleEmail("getAllStation接口请求异常", "异常信息：" + e.getMessage());
         }
 
         return null;
@@ -285,12 +272,12 @@ public class BasicSchedule {
             log.info("getAllStationNoRoute() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("getAllStationNoRoute接口请求异常", "异常信息：" + e.getStackTrace());
+            mailFacade.sendSimpleEmail("getAllStationNoRoute接口请求异常", "异常信息：" + e.getMessage());
         } catch (RemoteException e) {
             log.info("getAllStationNoRoute() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("getAllStationNoRoute接口请求异常", "异常信息：" + e.getStackTrace());
+            mailFacade.sendSimpleEmail("getAllStationNoRoute接口请求异常", "异常信息：" + e.getMessage());
         }
 
         return null;
@@ -326,12 +313,12 @@ public class BasicSchedule {
             log.info("getRouteInfo() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("getRouteInfo接口请求异常", "异常信息：" + e.getStackTrace());
+            mailFacade.sendSimpleEmail("getRouteInfo接口请求异常", "异常信息：" + e.getMessage());
         } catch (RemoteException e) {
             log.info("getRouteInfo() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("getRouteInfo接口请求异常", "异常信息：" + e.getStackTrace());
+            mailFacade.sendSimpleEmail("getRouteInfo接口请求异常", "异常信息：" + e.getMessage());
         }
 
         return null;
@@ -346,7 +333,9 @@ public class BasicSchedule {
         log.info("start to excute getSegmentByRoute()");
 
         try {
-            RouteRequest routeRequest = RouteRequest.builder().routeId("284").build();
+            RouteInfo routeInfo = routeInfoMapper.selectByRandom();
+
+            RouteRequest routeRequest = RouteRequest.builder().routeId(routeInfo.getRouteId()).build();
 
             String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getSegmentByRoute" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(routeRequest), true);
@@ -367,12 +356,12 @@ public class BasicSchedule {
             log.info("getSegmentByRoute() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("getSegmentByRoute接口请求异常", "异常信息：" + e.getStackTrace());
+            mailFacade.sendSimpleEmail("getSegmentByRoute接口请求异常", "异常信息：" + e.getMessage());
         } catch (RemoteException e) {
             log.info("getSegmentByRoute() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("getSegmentByRoute接口请求异常", "异常信息：" + e.getStackTrace());
+            mailFacade.sendSimpleEmail("getSegmentByRoute接口请求异常", "异常信息：" + e.getMessage());
         }
 
         return null;
@@ -387,7 +376,9 @@ public class BasicSchedule {
         log.info("start to excute getRouteByStation()");
 
         try {
-            StationRequest stationRequest = StationRequest.builder().stationId("03051164").build();
+            StationInfo stationInfo = stationInfoMapper.selectByRandom();
+
+            StationRequest stationRequest = StationRequest.builder().stationId(stationInfo.getStationId()).build();
 
             String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getRouteByStation" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(stationRequest), true);
@@ -408,12 +399,12 @@ public class BasicSchedule {
             log.info("getRouteByStation() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("getRouteByStation接口请求异常", "异常信息：" + e.getStackTrace());
+            mailFacade.sendSimpleEmail("getRouteByStation接口请求异常", "异常信息：" + e.getMessage());
         } catch (RemoteException e) {
             log.info("getRouteByStation() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("getRouteByStation接口请求异常", "异常信息：" + e.getStackTrace());
+            mailFacade.sendSimpleEmail("getRouteByStation接口请求异常", "异常信息：" + e.getMessage());
         }
 
         return null;
@@ -428,7 +419,9 @@ public class BasicSchedule {
         log.info("start to excute getStationBySegment()");
 
         try {
-            SegmentRequest segmentRequest = SegmentRequest.builder().segmentId("2731").build();
+            SegmentInfo segmentInfo = segmentInfoMapper.selectByRandom();
+
+            SegmentRequest segmentRequest = SegmentRequest.builder().segmentId(segmentInfo.getSegmentId()).build();
 
             String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getStationBySegment" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(segmentRequest), true);
@@ -449,12 +442,12 @@ public class BasicSchedule {
             log.info("getStationBySegment() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("getStationBySegment接口请求异常", "异常信息：" + e.getStackTrace());
+            mailFacade.sendSimpleEmail("getStationBySegment接口请求异常", "异常信息：" + e.getMessage());
         } catch (RemoteException e) {
             log.info("getStationBySegment() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("getStationBySegment接口请求异常", "异常信息：" + e.getStackTrace());
+            mailFacade.sendSimpleEmail("getStationBySegment接口请求异常", "异常信息：" + e.getMessage());
         }
 
         return null;
@@ -492,12 +485,12 @@ public class BasicSchedule {
             log.info("getStationByGps() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("getStationByGps接口请求异常", "异常信息：" + e.getStackTrace());
+            mailFacade.sendSimpleEmail("getStationByGps接口请求异常", "异常信息：" + e.getMessage());
         } catch (RemoteException e) {
             log.info("getStationByGps() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("getStationByGps接口请求异常", "异常信息：" + e.getStackTrace());
+            mailFacade.sendSimpleEmail("getStationByGps接口请求异常", "异常信息：" + e.getMessage());
         }
 
         return null;

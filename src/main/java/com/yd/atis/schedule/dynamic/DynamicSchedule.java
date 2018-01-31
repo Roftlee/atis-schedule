@@ -1,6 +1,14 @@
 package com.yd.atis.schedule.dynamic;
 
 import com.yd.atis.constant.SysConstant;
+import com.yd.atis.dao.RouteInfoMapper;
+import com.yd.atis.dao.SegmentInfoMapper;
+import com.yd.atis.dao.StationInfoMapper;
+import com.yd.atis.dao.StationSegmentRelationMapper;
+import com.yd.atis.dto.RouteInfo;
+import com.yd.atis.dto.SegmentInfo;
+import com.yd.atis.dto.StationInfo;
+import com.yd.atis.dto.StationSegmentRelation;
 import com.yd.atis.facade.mail.MailFacade;
 import com.yd.atis.model.ArriveStationBusEntity;
 import com.yd.atis.model.BusinessException;
@@ -39,6 +47,18 @@ public class DynamicSchedule {
 
     @Value("${logback.logdir}")
     private String logPath;
+
+    @Autowired
+    private RouteInfoMapper routeInfoMapper;
+
+    @Autowired
+    private SegmentInfoMapper segmentInfoMapper;
+
+    @Autowired
+    private StationInfoMapper stationInfoMapper;
+
+    @Autowired
+    private StationSegmentRelationMapper stationSegmentRelationMapper;
 
     @Autowired
     private MailFacade mailFacade;
@@ -97,7 +117,9 @@ public class DynamicSchedule {
         log.info("start to excute queryByStationID()");
 
         try {
-            StationRequest stationRequest = StationRequest.builder().routeId("-1").segmentId("").stationId("7072190").build();
+            StationInfo stationInfo = stationInfoMapper.selectByRandom();
+
+            StationRequest stationRequest = StationRequest.builder().routeId("-1").segmentId("").stationId(stationInfo.getStationId()).build();
 
             String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/dynamic/queryByStationID" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(stationRequest), true);
@@ -119,12 +141,12 @@ public class DynamicSchedule {
             log.info("queryByStationID() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("queryByStationID接口请求异常", "异常信息：" + e.getStackTrace());
+            mailFacade.sendSimpleEmail("queryByStationID接口请求异常", "异常信息：" + e.getMessage());
         } catch (RemoteException e) {
             log.info("queryByStationID() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("queryByStationID接口请求异常", "异常信息：" + e.getStackTrace());
+            mailFacade.sendSimpleEmail("queryByStationID接口请求异常", "异常信息：" + e.getMessage());
         }
 
         return null;
@@ -140,7 +162,9 @@ public class DynamicSchedule {
         log.info("start to excute queryByStationID2()");
 
         try {
-            StationRequest stationRequest = StationRequest.builder().routeId("-1").segmentId("1981").stationId("7072287").arrLftType(new Random().nextInt(2) + 1).build();
+            StationSegmentRelation ssr = stationSegmentRelationMapper.selectByRandom();
+
+            StationRequest stationRequest = StationRequest.builder().routeId("-1").segmentId(ssr.getSegmentId()).stationId(ssr.getStationId()).arrLftType(new Random().nextInt(2) + 1).build();
 
             String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/dynamic/queryByStationID2" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(stationRequest), true);
@@ -162,12 +186,12 @@ public class DynamicSchedule {
             log.info("queryByStationID2() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("queryByStationID2接口请求异常", "异常信息：" + e.getStackTrace());
+            mailFacade.sendSimpleEmail("queryByStationID2接口请求异常", "异常信息：" + e.getMessage());
         } catch (RemoteException e) {
             log.info("queryByStationID2() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("queryByStationID2接口请求异常", "异常信息：" + e.getStackTrace());
+            mailFacade.sendSimpleEmail("queryByStationID2接口请求异常", "异常信息：" + e.getMessage());
         }
 
         return null;
@@ -182,7 +206,9 @@ public class DynamicSchedule {
         log.info("start to excute requireBusPosition()");
 
         try {
-            StationRequest stationRequest = StationRequest.builder().routeId("198").segmentId("1981").stationId("7072287").build();
+            StationSegmentRelation ssr = stationSegmentRelationMapper.selectByRandom();
+
+            StationRequest stationRequest = StationRequest.builder().routeId(ssr.getRouteId()).segmentId(ssr.getSegmentId()).stationId(ssr.getStationId()).build();
 
             String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/dynamic/requireBusPosition" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(stationRequest), true);
@@ -204,12 +230,12 @@ public class DynamicSchedule {
             log.info("requireBusPosition() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("requireBusPosition接口请求异常", "异常信息：" + e.getStackTrace());
+            mailFacade.sendSimpleEmail("requireBusPosition接口请求异常", "异常信息：" + e.getMessage());
         } catch (RemoteException e) {
             log.info("requireBusPosition() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("requireBusPosition接口请求异常", "异常信息：" + e.getStackTrace());
+            mailFacade.sendSimpleEmail("requireBusPosition接口请求异常", "异常信息：" + e.getMessage());
         }
 
         return null;
@@ -224,7 +250,9 @@ public class DynamicSchedule {
         log.info("start to excute queryDetailByRouteId()");
 
         try {
-            SegmentRequest segmentRequest = SegmentRequest.builder().routeId("284").segmentId("2842").build();
+            SegmentInfo segmentInfo = segmentInfoMapper.selectByRandom();
+
+            SegmentRequest segmentRequest = SegmentRequest.builder().routeId(segmentInfo.getRouteId()).segmentId(segmentInfo.getSegmentId()).build();
 
             String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/dynamic/queryDetailByRouteID" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(segmentRequest), true);
@@ -246,12 +274,12 @@ public class DynamicSchedule {
             log.info("queryDetailByRouteId() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("queryDetailByRouteId接口请求异常", "异常信息：" + e.getStackTrace());
+            mailFacade.sendSimpleEmail("queryDetailByRouteId接口请求异常", "异常信息：" + e.getMessage());
         } catch (RemoteException e) {
             log.info("queryDetailByRouteId() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("queryDetailByRouteId接口请求异常", "异常信息：" + e.getStackTrace());
+            mailFacade.sendSimpleEmail("queryDetailByRouteId接口请求异常", "异常信息：" + e.getMessage());
         }
 
         return null;
@@ -266,7 +294,9 @@ public class DynamicSchedule {
         log.info("start to excute queryDetailByRouteID2()");
 
         try {
-            SegmentRequest segmentRequest = SegmentRequest.builder().routeId("284").segmentId("2842").arrLftType(new Random().nextInt(2) + 1).build();
+            SegmentInfo segmentInfo = segmentInfoMapper.selectByRandom();
+
+            SegmentRequest segmentRequest = SegmentRequest.builder().routeId(segmentInfo.getRouteId()).segmentId(segmentInfo.getSegmentId()).arrLftType(new Random().nextInt(2) + 1).build();
 
             String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/dynamic/queryDetailByRouteID2" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(segmentRequest), true);
@@ -288,12 +318,12 @@ public class DynamicSchedule {
             log.info("queryDetailByRouteID2() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("queryDetailByRouteID2接口请求异常", "异常信息：" + e.getStackTrace());
+            mailFacade.sendSimpleEmail("queryDetailByRouteID2接口请求异常", "异常信息：" + e.getMessage());
         } catch (RemoteException e) {
             log.info("queryDetailByRouteID2() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("queryDetailByRouteID2接口请求异常", "异常信息：" + e.getStackTrace());
+            mailFacade.sendSimpleEmail("queryDetailByRouteID2接口请求异常", "异常信息：" + e.getMessage());
         }
 
         return null;
@@ -308,7 +338,8 @@ public class DynamicSchedule {
         log.info("start to excute requireRouteSpeed()");
 
         try {
-            SegmentRequest segmentRequest = SegmentRequest.builder().routeId("198").build();
+            RouteInfo routeInfo = routeInfoMapper.selectByRandom();
+            SegmentRequest segmentRequest = SegmentRequest.builder().routeId(routeInfo.getRouteId()).build();
 
             String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/dynamic/requireRouteSpeed" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(segmentRequest), true);
@@ -330,12 +361,12 @@ public class DynamicSchedule {
             log.info("requireRouteSpeed() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("requireRouteSpeed接口请求异常", "异常信息：" + e.getStackTrace());
+            mailFacade.sendSimpleEmail("requireRouteSpeed接口请求异常", "异常信息：" + e.getMessage());
         } catch (RemoteException e) {
             log.info("requireRouteSpeed() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("requireRouteSpeed接口请求异常", "异常信息：" + e.getStackTrace());
+            mailFacade.sendSimpleEmail("requireRouteSpeed接口请求异常", "异常信息：" + e.getMessage());
         }
 
         return null;
