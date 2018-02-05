@@ -82,7 +82,7 @@ public class DynamicSchedule {
     /**
      * 定时调度任务 每天9点到18点之间每30分钟调用一次
      */
-    @Scheduled(cron = "0 0/30 8-20 * * ?")
+    @Scheduled(cron = "0 0/10 6-22 * * ?")
     public void excuteAtisDynamicService() {
 
         log.info("Atis dynamic task start!");
@@ -121,7 +121,7 @@ public class DynamicSchedule {
         StationRequest stationRequest = StationRequest.builder().routeId("-1").segmentId("").stationId(stationInfo.getStationId()).build();
 
         AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("queryByStationID")
-                .invokeParam(JsonUtils.toJson(stationRequest)).invokeStatus(0).exceptDesp("")
+                .invokeParam(JsonUtils.toJson(stationRequest)).invokeStatus(0).exceptDesp("接口调用异常")
                 .invokeTime(new Date()).build();
 
         try {
@@ -183,7 +183,7 @@ public class DynamicSchedule {
                 .stationId(ssr.getStationId()).arrLftType(new Random().nextInt(2) + 1).build();
 
         AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("queryByStationID2")
-                .invokeParam(JsonUtils.toJson(stationRequest)).invokeStatus(0).exceptDesp("")
+                .invokeParam(JsonUtils.toJson(stationRequest)).invokeStatus(0).exceptDesp("接口调用异常")
                 .invokeTime(new Date()).build();
 
         try {
@@ -244,7 +244,7 @@ public class DynamicSchedule {
                 .segmentId(ssr.getSegmentId()).stationId(ssr.getStationId()).build();
 
         AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("requireBusPosition")
-                .invokeParam(JsonUtils.toJson(stationRequest)).invokeStatus(0).exceptDesp("")
+                .invokeParam(JsonUtils.toJson(stationRequest)).invokeStatus(0).exceptDesp("接口调用异常")
                 .invokeTime(new Date()).build();
 
         try {
@@ -304,7 +304,7 @@ public class DynamicSchedule {
         SegmentRequest segmentRequest = SegmentRequest.builder().routeId(segmentInfo.getRouteId()).segmentId(segmentInfo.getSegmentId()).build();
 
         AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("queryDetailByRouteId")
-                .invokeParam(JsonUtils.toJson(segmentRequest)).invokeStatus(0).exceptDesp("")
+                .invokeParam(JsonUtils.toJson(segmentRequest)).invokeStatus(0).exceptDesp("接口调用异常")
                 .invokeTime(new Date()).build();
 
         try {
@@ -363,7 +363,7 @@ public class DynamicSchedule {
                 .segmentId(segmentInfo.getSegmentId()).arrLftType(new Random().nextInt(2) + 1).build();
 
         AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("queryDetailByRouteID2")
-                .invokeParam(JsonUtils.toJson(segmentRequest)).invokeStatus(0).exceptDesp("")
+                .invokeParam(JsonUtils.toJson(segmentRequest)).invokeStatus(0).exceptDesp("接口调用异常")
                 .invokeTime(new Date()).build();
 
         try {
@@ -423,7 +423,7 @@ public class DynamicSchedule {
         SegmentRequest segmentRequest = SegmentRequest.builder().routeId(routeInfo.getRouteId()).build();
 
         AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("requireRouteSpeed")
-                .invokeParam(JsonUtils.toJson(segmentRequest)).invokeStatus(0).exceptDesp("")
+                .invokeParam(JsonUtils.toJson(segmentRequest)).invokeStatus(0).exceptDesp("接口调用异常")
                 .invokeTime(new Date()).build();
 
         try {

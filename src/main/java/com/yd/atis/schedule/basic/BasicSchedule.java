@@ -85,7 +85,7 @@ public class BasicSchedule {
     /**
      * 定时调度任务 每天9点到18点之间每30分钟调用一次
      */
-    @Scheduled(cron = "0 0/30 8-20 * * ?")
+    @Scheduled(cron = "0 0/10 6-22 * * ?")
     public void excuteAtisBasicService() {
 
         log.info("Atis basic task start!");
@@ -133,7 +133,7 @@ public class BasicSchedule {
         StationRequest stationRequest = StationRequest.builder().stationName(stationInfo.getStationName()).build();
 
         AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("getStationInfo")
-                .invokeParam(JsonUtils.toJson(stationRequest)).invokeStatus(0).exceptDesp("")
+                .invokeParam(JsonUtils.toJson(stationRequest)).invokeStatus(0).exceptDesp("接口调用异常")
                 .invokeTime(new Date()).build();
 
         try {
@@ -190,7 +190,7 @@ public class BasicSchedule {
         StationRequest stationRequest = StationRequest.builder().stationName(stationInfo.getStationName()).build();
 
         AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("getStationInfoNoRoute")
-                .invokeParam(JsonUtils.toJson(stationRequest)).invokeStatus(0).exceptDesp("")
+                .invokeParam(JsonUtils.toJson(stationRequest)).invokeStatus(0).exceptDesp("接口调用异常")
                 .invokeTime(new Date()).build();
 
         try {
@@ -246,7 +246,7 @@ public class BasicSchedule {
         log.info("start to excute getAllStation()");
 
         AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("getAllStation")
-                .invokeTime(new Date()).invokeStatus(0).exceptDesp("").build();
+                .invokeTime(new Date()).invokeStatus(0).exceptDesp("接口调用异常").build();
 
         try {
 
@@ -299,7 +299,7 @@ public class BasicSchedule {
         log.info("start to excute getAllStationNoRoute()");
 
         AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("getAllStationNoRoute")
-                .invokeStatus(0).exceptDesp("").build();
+                .invokeStatus(0).exceptDesp("接口调用异常").build();
 
         try {
 
@@ -354,7 +354,7 @@ public class BasicSchedule {
         RouteRequest routeRequest = RouteRequest.builder().routeId("-1").routeName("-1").build();
 
         AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("getRouteInfo")
-                .invokeParam(JsonUtils.toJson(routeRequest)).invokeStatus(0).exceptDesp("")
+                .invokeParam(JsonUtils.toJson(routeRequest)).invokeStatus(0).exceptDesp("接口调用异常")
                 .invokeTime(new Date()).build();
 
         try {
@@ -411,7 +411,7 @@ public class BasicSchedule {
         RouteRequest routeRequest = RouteRequest.builder().routeId(routeInfo.getRouteId()).build();
 
         AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("getSegmentByRoute")
-                .invokeParam(JsonUtils.toJson(routeRequest)).invokeStatus(0).exceptDesp("")
+                .invokeParam(JsonUtils.toJson(routeRequest)).invokeStatus(0).exceptDesp("接口调用异常")
                 .invokeTime(new Date()).build();
 
         try {
@@ -468,7 +468,7 @@ public class BasicSchedule {
         StationRequest stationRequest = StationRequest.builder().stationId(stationInfo.getStationId()).build();
 
         AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("getRouteByStation")
-                .invokeParam(JsonUtils.toJson(stationRequest)).invokeStatus(0).exceptDesp("")
+                .invokeParam(JsonUtils.toJson(stationRequest)).invokeStatus(0).exceptDesp("接口调用异常")
                 .invokeTime(new Date()).build();
 
         try {
@@ -525,7 +525,7 @@ public class BasicSchedule {
         SegmentRequest segmentRequest = SegmentRequest.builder().segmentId(segmentInfo.getSegmentId()).build();
 
         AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("getStationBySegment")
-                .invokeParam(JsonUtils.toJson(segmentRequest)).invokeStatus(0).exceptDesp("")
+                .invokeParam(JsonUtils.toJson(segmentRequest)).invokeStatus(0).exceptDesp("接口调用异常")
                 .invokeTime(new Date()).build();
 
         try {
@@ -582,7 +582,7 @@ public class BasicSchedule {
                 .lonRange(1000.0).latRange(1000.0).build();
 
         AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("getStationByGps")
-                .invokeParam(JsonUtils.toJson(stationRequest)).invokeStatus(0).exceptDesp("")
+                .invokeParam(JsonUtils.toJson(stationRequest)).invokeStatus(0).exceptDesp("接口调用异常")
                 .invokeTime(new Date()).build();
 
         try {
@@ -640,7 +640,7 @@ public class BasicSchedule {
                 .lonRange(1000.0).latRange(1000.0).build();
 
         AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("getStationByGpsNoRoute")
-                .invokeParam(JsonUtils.toJson(stationRequest)).invokeStatus(0).exceptDesp("")
+                .invokeParam(JsonUtils.toJson(stationRequest)).invokeStatus(0).exceptDesp("接口调用异常")
                 .invokeTime(new Date()).build();
 
         try {
