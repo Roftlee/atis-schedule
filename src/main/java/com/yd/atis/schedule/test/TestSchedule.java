@@ -5,10 +5,8 @@ import com.yd.atis.dao.RouteInfoMapper;
 import com.yd.atis.dao.SegmentInfoMapper;
 import com.yd.atis.dao.StationInfoMapper;
 import com.yd.atis.dao.StationSegmentRelationMapper;
-import com.yd.atis.dto.RouteInfo;
-import com.yd.atis.dto.SegmentInfo;
-import com.yd.atis.dto.StationInfo;
-import com.yd.atis.dto.StationSegmentRelation;
+import com.yd.atis.dto.*;
+import com.yd.atis.facade.atisInvokeLog.AtisInvokeLogFacade;
 import com.yd.atis.facade.mail.MailFacade;
 import com.yd.atis.model.StationInfoEntity;
 import com.yd.atis.request.station.StationRequest;
@@ -55,7 +53,10 @@ public class TestSchedule {
     @Autowired
     private StationSegmentRelationMapper stationSegmentRelationMapper;
 
-    @Scheduled(cron = "*/10 * * * * ?")
+    @Autowired
+    private AtisInvokeLogFacade atisInvokeLogFacade;
+
+//    @Scheduled(cron = "*/10 * * * * ?")
     private void test() {
         try {
             log.info("start to excute test()");
@@ -86,6 +87,9 @@ public class TestSchedule {
 
             FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stations), true);
 
+            AtisInvokeLog record = AtisInvokeLog.builder().invokeFunc("test").invokeParam(JsonUtils.toJson(stationRequest))
+                    .invokeStatus(1).build();
+            atisInvokeLogFacade.insertSelective(record);
 
             log.info("excute test() end");
 

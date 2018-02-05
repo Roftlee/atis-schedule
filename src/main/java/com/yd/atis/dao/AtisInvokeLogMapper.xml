@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yd.atis.dao.AtisInvokeLogMapper">
+  <resultMap id="BaseResultMap" type="com.yd.atis.dto.AtisInvokeLog">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="invoke_func" jdbcType="VARCHAR" property="invokeFunc" />
+    <result column="invoke_param" jdbcType="VARCHAR" property="invokeParam" />
+    <result column="invoke_time" jdbcType="TIMESTAMP" property="invokeTime" />
+    <result column="invoke_status" jdbcType="TINYINT" property="invokeStatus" />
+    <result column="except_desp" jdbcType="VARCHAR" property="exceptDesp" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, invoke_func, invoke_param, invoke_time, invoke_status, except_desp, created_time, 
+    updated_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from atis_invoke_log
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from atis_invoke_log
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yd.atis.dto.AtisInvokeLog">
+    insert into atis_invoke_log (id, invoke_func, invoke_param, 
+      invoke_time, invoke_status, except_desp, 
+      created_time, updated_time)
+    values (#{id,jdbcType=INTEGER}, #{invokeFunc,jdbcType=VARCHAR}, #{invokeParam,jdbcType=VARCHAR}, 
+      #{invokeTime,jdbcType=TIMESTAMP}, #{invokeStatus,jdbcType=TINYINT}, #{exceptDesp,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yd.atis.dto.AtisInvokeLog">
+    insert into atis_invoke_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="invokeFunc != null">
+        invoke_func,
+      </if>
+      <if test="invokeParam != null">
+        invoke_param,
+      </if>
+      <if test="invokeTime != null">
+        invoke_time,
+      </if>
+      <if test="invokeStatus != null">
+        invoke_status,
+      </if>
+      <if test="exceptDesp != null">
+        except_desp,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="updatedTime != null">
+        updated_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="invokeFunc != null">
+        #{invokeFunc,jdbcType=VARCHAR},
+      </if>
+      <if test="invokeParam != null">
+        #{invokeParam,jdbcType=VARCHAR},
+      </if>
+      <if test="invokeTime != null">
+        #{invokeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="invokeStatus != null">
+        #{invokeStatus,jdbcType=TINYINT},
+      </if>
+      <if test="exceptDesp != null">
+        #{exceptDesp,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null">
+        #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yd.atis.dto.AtisInvokeLog">
+    update atis_invoke_log
+    <set>
+      <if test="invokeFunc != null">
+        invoke_func = #{invokeFunc,jdbcType=VARCHAR},
+      </if>
+      <if test="invokeParam != null">
+        invoke_param = #{invokeParam,jdbcType=VARCHAR},
+      </if>
+      <if test="invokeTime != null">
+        invoke_time = #{invokeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="invokeStatus != null">
+        invoke_status = #{invokeStatus,jdbcType=TINYINT},
+      </if>
+      <if test="exceptDesp != null">
+        except_desp = #{exceptDesp,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null">
+        updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yd.atis.dto.AtisInvokeLog">
+    update atis_invoke_log
+    set invoke_func = #{invokeFunc,jdbcType=VARCHAR},
+      invoke_param = #{invokeParam,jdbcType=VARCHAR},
+      invoke_time = #{invokeTime,jdbcType=TIMESTAMP},
+      invoke_status = #{invokeStatus,jdbcType=TINYINT},
+      except_desp = #{exceptDesp,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <!-- 查询atis接口调用日志列表 -->
+    <select id="queryAtisInvokeLogList" parameterType="com.yd.atis.dto.AtisInvokeLog" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM atis_invoke_log
+        <where>
+            <if test="invokeFunc!=null and invokeFunc!='' ">
+                AND invoke_func=#{invokeFunc,jdbcType=VARCHAR}
+            </if>
+            <if test="invokeParam!=null and invokeParam!='' ">
+                AND invoke_param=#{invokeParam,jdbcType=VARCHAR}
+            </if>
+            <if test="invokeStatus!=null ">
+                AND invoke_status=#{invokeStatus, jdbcType=NUMERIC}
+            </if>
+            <if test="exceptDesp!=null and exceptDesp!='' ">
+                AND except_desp=#{exceptDesp, jdbcType=VARCHAR}
+            </if>
+            <if test="keywords!=null and keywords!='' ">
+                AND (
+                invoke_func LIKE CONCAT('%', #{keywords}, '%')
+                OR invoke_param LIKE CONCAT('%', #{keywords}, '%')
+                OR except_desp LIKE CONCAT('%', #{keywords}, '%')
+                )
+            </if>
+            <if test="ids!=null and ids.size!=0 ">
+                AND id IN
+                <foreach close=")" collection="ids" index="index" item="item" open="(" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+</mapper>

@@ -5,9 +5,11 @@ import com.yd.atis.dao.RouteInfoMapper;
 import com.yd.atis.dao.SegmentInfoMapper;
 import com.yd.atis.dao.StationInfoMapper;
 import com.yd.atis.dao.StationSegmentRelationMapper;
+import com.yd.atis.dto.AtisInvokeLog;
 import com.yd.atis.dto.RouteInfo;
 import com.yd.atis.dto.SegmentInfo;
 import com.yd.atis.dto.StationInfo;
+import com.yd.atis.facade.atisInvokeLog.AtisInvokeLogFacade;
 import com.yd.atis.facade.mail.MailFacade;
 import com.yd.atis.model.BusinessException;
 import com.yd.atis.model.RouteInfoEntity;
@@ -61,6 +63,9 @@ public class BasicSchedule {
     @Autowired
     private StationInfoMapper stationInfoMapper;
 
+    @Autowired
+    private AtisInvokeLogFacade atisInvokeLogFacade;
+
     private void initService() {
         try {
             
@@ -80,7 +85,7 @@ public class BasicSchedule {
     /**
      * 定时调度任务 每天9点到18点之间每30分钟调用一次
      */
-    @Scheduled(cron = "0 0/30 9-18 * * ?")
+    @Scheduled(cron = "0 0/30 8-20 * * ?")
     public void excuteAtisBasicService() {
 
         log.info("Atis basic task start!");
@@ -124,21 +129,30 @@ public class BasicSchedule {
 
         log.info("start to excute getStationInfo()");
 
+        StationInfo stationInfo = stationInfoMapper.selectByRandom();
+        StationRequest stationRequest = StationRequest.builder().stationName(stationInfo.getStationName()).build();
+
+        AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("getStationInfo")
+                .invokeParam(JsonUtils.toJson(stationRequest)).invokeStatus(0).exceptDesp("")
+                .invokeTime(new Date()).build();
+
         try {
-
-            StationInfo stationInfo = stationInfoMapper.selectByRandom();
-
-            StationRequest stationRequest = StationRequest.builder().stationName(stationInfo.getStationName()).build();
-
             String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getStationInfo" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(stationRequest), true);
 
             //获取站点基础信息
             StationInfoEntity[] stations = basicService.getStationInfo(stationRequest.getStationId(), stationRequest.getStationName(), username, password);
 
+            Integer invokeStatus = 1;
+            String exceptDesp = "";
             if (stations == null || stations.length == 0) {
-                mailFacade.sendSimpleEmail("getStationInfo接口返回null", "getStationInfo接口返回null，请求参数：" + JsonUtils.toJson(stationRequest));
+                invokeStatus = 0;
+                exceptDesp = "接口返回结果为空";
             }
+
+            addAtisInvokeLog(AtisInvokeLog.builder().invokeFunc("getStationInfo")
+                    .invokeParam(JsonUtils.toJson(stationRequest)).invokeStatus(invokeStatus).exceptDesp(exceptDesp)
+                    .build());
 
             FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stations), true);
 
@@ -149,12 +163,16 @@ public class BasicSchedule {
             log.info("getStationInfo() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("getStationInfo接口请求异常", "异常信息：" + e.getMessage());
+            sendEmail("getStationInfo接口请求异常", "异常信息：" + e.getMessage());
+
+            addAtisInvokeLog(exceptLog);
         } catch (RemoteException e) {
             log.info("getStationInfo() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("getStationInfo接口请求异常", "异常信息：" + e.getMessage());
+            sendEmail("getStationInfo接口请求异常", "异常信息：" + e.getMessage());
+
+            addAtisInvokeLog(exceptLog);
         }
 
         return null;
@@ -168,10 +186,15 @@ public class BasicSchedule {
 
         log.info("start to excute getStationInfoNoRoute()");
 
-        try {
-            StationInfo stationInfo = stationInfoMapper.selectByRandom();
+        StationInfo stationInfo = stationInfoMapper.selectByRandom();
+        StationRequest stationRequest = StationRequest.builder().stationName(stationInfo.getStationName()).build();
 
-            StationRequest stationRequest = StationRequest.builder().stationName(stationInfo.getStationName()).build();
+        AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("getStationInfoNoRoute")
+                .invokeParam(JsonUtils.toJson(stationRequest)).invokeStatus(0).exceptDesp("")
+                .invokeTime(new Date()).build();
+
+        try {
+
 
             String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getStationInfoNoRoute" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(stationRequest), true);
@@ -179,9 +202,16 @@ public class BasicSchedule {
             //获取站点基础信息
             StationInfoEntity[] stations = basicService.getStationInfoNoRoute(stationRequest.getStationId(), stationRequest.getStationName(), username, password);
 
+            Integer invokeStatus = 1;
+            String exceptDesp = "";
             if (stations == null || stations.length == 0) {
-                mailFacade.sendSimpleEmail("getStationInfoNoRoute接口返回null", "getStationInfoNoRoute接口返回null，请求参数：" + JsonUtils.toJson(stationRequest));
+                invokeStatus = 0;
+                exceptDesp = "接口返回结果为空";
             }
+
+            addAtisInvokeLog(AtisInvokeLog.builder().invokeFunc("getStationInfoNoRoute")
+                    .invokeParam(JsonUtils.toJson(stationRequest)).invokeTime(new Date())
+                    .invokeStatus(invokeStatus).exceptDesp(exceptDesp).build());
 
             FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stations), true);
 
@@ -192,12 +222,16 @@ public class BasicSchedule {
             log.info("getStationInfoNoRoute() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("getStationInfoNoRoute接口请求异常", "异常信息：" + e.getMessage());
+            sendEmail("getStationInfoNoRoute接口请求异常", "异常信息：" + e.getMessage());
+
+            addAtisInvokeLog(exceptLog);
         } catch (RemoteException e) {
             log.info("getStationInfoNoRoute() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("getStationInfoNoRoute接口请求异常", "异常信息：" + e.getMessage());
+            sendEmail("getStationInfoNoRoute接口请求异常", "异常信息：" + e.getMessage());
+
+            addAtisInvokeLog(exceptLog);
         }
 
         return null;
@@ -211,6 +245,9 @@ public class BasicSchedule {
 
         log.info("start to excute getAllStation()");
 
+        AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("getAllStation")
+                .invokeTime(new Date()).invokeStatus(0).exceptDesp("").build();
+
         try {
 
             String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getAllStation" + SysConstant.LOG_FILE_SUFFIX;
@@ -219,9 +256,15 @@ public class BasicSchedule {
             //获取站点基础信息
             StationInfoEntity[] stations = basicService.getAllStation(username, password);
 
+            Integer invokeStatus = 1;
+            String exceptDesp = "";
             if (stations == null || stations.length == 0) {
-                mailFacade.sendSimpleEmail("getAllStation接口返回null", "getAllStation接口返回null");
+                invokeStatus = 0;
+                exceptDesp = "接口返回结果为空";
             }
+
+            addAtisInvokeLog(AtisInvokeLog.builder().invokeFunc("getAllStation")
+                    .invokeTime(new Date()).invokeStatus(invokeStatus).exceptDesp(exceptDesp).build());
 
             FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stations), true);
 
@@ -232,12 +275,16 @@ public class BasicSchedule {
             log.info("getAllStation() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("getAllStation接口请求异常", "异常信息：" + e.getMessage());
+            sendEmail("getAllStation接口请求异常", "异常信息：" + e.getMessage());
+
+            addAtisInvokeLog(exceptLog);
         } catch (RemoteException e) {
             log.info("getAllStation() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("getAllStation接口请求异常", "异常信息：" + e.getMessage());
+            sendEmail("getAllStation接口请求异常", "异常信息：" + e.getMessage());
+
+            addAtisInvokeLog(exceptLog);
         }
 
         return null;
@@ -251,6 +298,9 @@ public class BasicSchedule {
 
         log.info("start to excute getAllStationNoRoute()");
 
+        AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("getAllStationNoRoute")
+                .invokeStatus(0).exceptDesp("").build();
+
         try {
 
             String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getAllStationNoRoute" + SysConstant.LOG_FILE_SUFFIX;
@@ -259,9 +309,15 @@ public class BasicSchedule {
             //获取站点基础信息
             StationInfoEntity[] stations = basicService.getAllStationNoRoute(username, password);
 
+            Integer invokeStatus = 1;
+            String exceptDesp = "";
             if (stations == null || stations.length == 0) {
-                mailFacade.sendSimpleEmail("getAllStationNoRoute接口返回null", "getAllStationNoRoute接口返回null");
+                invokeStatus = 0;
+                exceptDesp = "接口返回结果为空";
             }
+
+            addAtisInvokeLog(AtisInvokeLog.builder().invokeFunc("getAllStationNoRoute")
+                    .invokeTime(new Date()).invokeStatus(invokeStatus).exceptDesp(exceptDesp).build());
 
             FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stations), true);
 
@@ -272,12 +328,16 @@ public class BasicSchedule {
             log.info("getAllStationNoRoute() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("getAllStationNoRoute接口请求异常", "异常信息：" + e.getMessage());
+            sendEmail("getAllStationNoRoute接口请求异常", "异常信息：" + e.getMessage());
+
+            addAtisInvokeLog(exceptLog);
         } catch (RemoteException e) {
             log.info("getAllStationNoRoute() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("getAllStationNoRoute接口请求异常", "异常信息：" + e.getMessage());
+            sendEmail("getAllStationNoRoute接口请求异常", "异常信息：" + e.getMessage());
+
+            addAtisInvokeLog(exceptLog);
         }
 
         return null;
@@ -291,18 +351,29 @@ public class BasicSchedule {
 
         log.info("start to excute getRouteInfo()");
 
-        try {
-            RouteRequest routeRequest = RouteRequest.builder().routeId("-1").routeName("-1").build();
+        RouteRequest routeRequest = RouteRequest.builder().routeId("-1").routeName("-1").build();
 
+        AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("getRouteInfo")
+                .invokeParam(JsonUtils.toJson(routeRequest)).invokeStatus(0).exceptDesp("")
+                .invokeTime(new Date()).build();
+
+        try {
             String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getRouteInfo" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(routeRequest), true);
 
             //获取线路基础信息
             RouteInfoEntity[] routes = basicService.getRouteInfo(routeRequest.getRouteId(), routeRequest.getRouteName(), username, password);
 
+            Integer invokeStatus = 1;
+            String exceptDesp = "";
             if (routes == null || routes.length == 0) {
-                mailFacade.sendSimpleEmail("getRouteInfo接口返回null", "getRouteInfo接口返回null，请求参数：" + JsonUtils.toJson(routeRequest));
+                invokeStatus = 0;
+                exceptDesp = "接口返回结果为空";
             }
+
+            addAtisInvokeLog(AtisInvokeLog.builder().invokeFunc("getRouteInfo")
+                    .invokeParam(JsonUtils.toJson(routeRequest)).invokeTime(new Date())
+                    .invokeStatus(invokeStatus).exceptDesp(exceptDesp).build());
 
             FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(routes), true);
 
@@ -313,12 +384,16 @@ public class BasicSchedule {
             log.info("getRouteInfo() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("getRouteInfo接口请求异常", "异常信息：" + e.getMessage());
+            sendEmail("getRouteInfo接口请求异常", "异常信息：" + e.getMessage());
+
+            addAtisInvokeLog(exceptLog);
         } catch (RemoteException e) {
             log.info("getRouteInfo() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("getRouteInfo接口请求异常", "异常信息：" + e.getMessage());
+            sendEmail("getRouteInfo接口请求异常", "异常信息：" + e.getMessage());
+
+            addAtisInvokeLog(exceptLog);
         }
 
         return null;
@@ -332,20 +407,30 @@ public class BasicSchedule {
 
         log.info("start to excute getSegmentByRoute()");
 
+        RouteInfo routeInfo = routeInfoMapper.selectByRandom();
+        RouteRequest routeRequest = RouteRequest.builder().routeId(routeInfo.getRouteId()).build();
+
+        AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("getSegmentByRoute")
+                .invokeParam(JsonUtils.toJson(routeRequest)).invokeStatus(0).exceptDesp("")
+                .invokeTime(new Date()).build();
+
         try {
-            RouteInfo routeInfo = routeInfoMapper.selectByRandom();
-
-            RouteRequest routeRequest = RouteRequest.builder().routeId(routeInfo.getRouteId()).build();
-
             String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getSegmentByRoute" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(routeRequest), true);
 
             //获取某一线路的单程信息
             SegmentInfoEntity[] segments = basicService.getSegmentByRoute(routeRequest.getRouteId(), username, password);
 
+            Integer invokeStatus = 1;
+            String exceptDesp = "";
             if (segments == null || segments.length == 0) {
-                mailFacade.sendSimpleEmail("getSegmentByRoute接口返回null", "getSegmentByRoute接口返回null，请求参数：" + JsonUtils.toJson(routeRequest));
+                invokeStatus = 0;
+                exceptDesp = "接口返回结果为空";
             }
+
+            addAtisInvokeLog(AtisInvokeLog.builder().invokeFunc("getSegmentByRoute")
+                    .invokeParam(JsonUtils.toJson(routeRequest)).invokeTime(new Date())
+                    .invokeStatus(invokeStatus).exceptDesp(exceptDesp).build());
 
             FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(segments), true);
 
@@ -356,12 +441,16 @@ public class BasicSchedule {
             log.info("getSegmentByRoute() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("getSegmentByRoute接口请求异常", "异常信息：" + e.getMessage());
+            sendEmail("getSegmentByRoute接口请求异常", "异常信息：" + e.getMessage());
+
+            addAtisInvokeLog(exceptLog);
         } catch (RemoteException e) {
             log.info("getSegmentByRoute() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("getSegmentByRoute接口请求异常", "异常信息：" + e.getMessage());
+            sendEmail("getSegmentByRoute接口请求异常", "异常信息：" + e.getMessage());
+
+            addAtisInvokeLog(exceptLog);
         }
 
         return null;
@@ -375,20 +464,30 @@ public class BasicSchedule {
 
         log.info("start to excute getRouteByStation()");
 
+        StationInfo stationInfo = stationInfoMapper.selectByRandom();
+        StationRequest stationRequest = StationRequest.builder().stationId(stationInfo.getStationId()).build();
+
+        AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("getRouteByStation")
+                .invokeParam(JsonUtils.toJson(stationRequest)).invokeStatus(0).exceptDesp("")
+                .invokeTime(new Date()).build();
+
         try {
-            StationInfo stationInfo = stationInfoMapper.selectByRandom();
-
-            StationRequest stationRequest = StationRequest.builder().stationId(stationInfo.getStationId()).build();
-
             String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getRouteByStation" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(stationRequest), true);
 
             //获取经过某一站点的线路信息
             RouteInfoEntity[] routes = basicService.getRouteByStation(stationRequest.getStationId(), username, password);
 
+            Integer invokeStatus = 1;
+            String exceptDesp = "";
             if (routes == null || routes.length == 0) {
-                mailFacade.sendSimpleEmail("getRouteByStation接口返回null", "getRouteByStation接口返回null，请求参数：" + JsonUtils.toJson(stationRequest));
+                invokeStatus = 0;
+                exceptDesp = "接口返回结果为空";
             }
+
+            addAtisInvokeLog(AtisInvokeLog.builder().invokeFunc("getRouteByStation")
+                    .invokeParam(JsonUtils.toJson(stationRequest)).invokeTime(new Date())
+                    .invokeStatus(invokeStatus).exceptDesp(exceptDesp).build());
 
             FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(routes), true);
 
@@ -399,12 +498,16 @@ public class BasicSchedule {
             log.info("getRouteByStation() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("getRouteByStation接口请求异常", "异常信息：" + e.getMessage());
+            sendEmail("getRouteByStation接口请求异常", "异常信息：" + e.getMessage());
+
+            addAtisInvokeLog(exceptLog);
         } catch (RemoteException e) {
             log.info("getRouteByStation() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("getRouteByStation接口请求异常", "异常信息：" + e.getMessage());
+            sendEmail("getRouteByStation接口请求异常", "异常信息：" + e.getMessage());
+
+            addAtisInvokeLog(exceptLog);
         }
 
         return null;
@@ -418,20 +521,30 @@ public class BasicSchedule {
 
         log.info("start to excute getStationBySegment()");
 
+        SegmentInfo segmentInfo = segmentInfoMapper.selectByRandom();
+        SegmentRequest segmentRequest = SegmentRequest.builder().segmentId(segmentInfo.getSegmentId()).build();
+
+        AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("getStationBySegment")
+                .invokeParam(JsonUtils.toJson(segmentRequest)).invokeStatus(0).exceptDesp("")
+                .invokeTime(new Date()).build();
+
         try {
-            SegmentInfo segmentInfo = segmentInfoMapper.selectByRandom();
-
-            SegmentRequest segmentRequest = SegmentRequest.builder().segmentId(segmentInfo.getSegmentId()).build();
-
             String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getStationBySegment" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(segmentRequest), true);
 
             //根据单程获取站点信息
             StationInfoEntity[] stations = basicService.getStationBySegment(segmentRequest.getSegmentId(), username, password);
 
+            Integer invokeStatus = 1;
+            String exceptDesp = "";
             if (stations == null || stations.length == 0) {
-                mailFacade.sendSimpleEmail("getStationBySegment接口返回null", "getStationBySegment接口返回null，请求参数：" + JsonUtils.toJson(segmentRequest));
+                invokeStatus = 0;
+                exceptDesp = "接口返回结果为空";
             }
+
+            addAtisInvokeLog(AtisInvokeLog.builder().invokeFunc("getStationBySegment")
+                    .invokeParam(JsonUtils.toJson(segmentRequest)).invokeTime(new Date())
+                    .invokeStatus(invokeStatus).exceptDesp(exceptDesp).build());
 
             FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stations), true);
 
@@ -442,29 +555,37 @@ public class BasicSchedule {
             log.info("getStationBySegment() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("getStationBySegment接口请求异常", "异常信息：" + e.getMessage());
+            sendEmail("getStationBySegment接口请求异常", "异常信息：" + e.getMessage());
+
+            addAtisInvokeLog(exceptLog);
         } catch (RemoteException e) {
             log.info("getStationBySegment() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("getStationBySegment接口请求异常", "异常信息：" + e.getMessage());
+            sendEmail("getStationBySegment接口请求异常", "异常信息：" + e.getMessage());
+
+            addAtisInvokeLog(exceptLog);
         }
 
         return null;
     }
 
     /**
-     * 根据位置查询范围内的站点
+     * 根据位置查询范围内的站点，lonRange,latRange单位为米，有线路关联
      * @return
      */
     private StationInfoEntity[] getStationByGps() {
 
         log.info("start to excute getStationByGps()");
 
-        try {
-            StationRequest stationRequest = StationRequest.builder().longitude(112.979885).latitude(28.201137)
-                    .lonRange(0.011).latRange(0.009).build();
+        StationRequest stationRequest = StationRequest.builder().longitude(112.979885).latitude(28.201137)
+                .lonRange(1000.0).latRange(1000.0).build();
 
+        AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("getStationByGps")
+                .invokeParam(JsonUtils.toJson(stationRequest)).invokeStatus(0).exceptDesp("")
+                .invokeTime(new Date()).build();
+
+        try {
             String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getStationByGps" + SysConstant.LOG_FILE_SUFFIX;
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(stationRequest), true);
 
@@ -472,9 +593,16 @@ public class BasicSchedule {
             StationInfoEntity[] stations = basicService.getStationByGps(stationRequest.getLongitude(),
                     stationRequest.getLatitude(), stationRequest.getLonRange(), stationRequest.getLatRange(), 1000D, username, password);
 
+            Integer invokeStatus = 1;
+            String exceptDesp = "";
             if (stations == null || stations.length == 0) {
-                mailFacade.sendSimpleEmail("getStationByGps接口返回null", "getStationByGps接口返回null，请求参数：" + JsonUtils.toJson(stationRequest));
+                invokeStatus = 0;
+                exceptDesp = "接口返回结果为空";
             }
+
+            addAtisInvokeLog(AtisInvokeLog.builder().invokeFunc("getStationByGps")
+                    .invokeParam(JsonUtils.toJson(stationRequest)).invokeTime(new Date())
+                    .invokeStatus(invokeStatus).exceptDesp(exceptDesp).build());
 
             FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stations), true);
 
@@ -485,14 +613,93 @@ public class BasicSchedule {
             log.info("getStationByGps() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("getStationByGps接口请求异常", "异常信息：" + e.getMessage());
+            sendEmail("getStationByGps接口请求异常", "异常信息：" + e.getMessage());
+
+            addAtisInvokeLog(exceptLog);
         } catch (RemoteException e) {
             log.info("getStationByGps() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("getStationByGps接口请求异常", "异常信息：" + e.getMessage());
+            sendEmail("getStationByGps接口请求异常", "异常信息：" + e.getMessage());
+
+            addAtisInvokeLog(exceptLog);
         }
 
         return null;
+    }
+
+    /**
+     * 根据位置查询范围内的站点，lonRange,latRange单位为米，无线路关联
+     * @return
+     */
+    private StationInfoEntity[] getStationByGpsNoRoute() {
+
+        log.info("start to excute getStationByGpsNoRoute()");
+
+        StationRequest stationRequest = StationRequest.builder().longitude(112.979885).latitude(28.201137)
+                .lonRange(1000.0).latRange(1000.0).build();
+
+        AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("getStationByGpsNoRoute")
+                .invokeParam(JsonUtils.toJson(stationRequest)).invokeStatus(0).exceptDesp("")
+                .invokeTime(new Date()).build();
+
+        try {
+            String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getStationByGpsNoRoute" + SysConstant.LOG_FILE_SUFFIX;
+            FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(stationRequest), true);
+
+            //查询附近的站点
+            StationInfoEntity[] stations = basicService.getStationByGps(stationRequest.getLongitude(),
+                    stationRequest.getLatitude(), stationRequest.getLonRange(), stationRequest.getLatRange(), 1000D, username, password);
+
+            Integer invokeStatus = 1;
+            String exceptDesp = "";
+            if (stations == null || stations.length == 0) {
+                invokeStatus = 0;
+                exceptDesp = "接口返回结果为空";
+            }
+
+            addAtisInvokeLog(AtisInvokeLog.builder().invokeFunc("getStationByGpsNoRoute")
+                    .invokeParam(JsonUtils.toJson(stationRequest)).invokeTime(new Date())
+                    .invokeStatus(invokeStatus).exceptDesp(exceptDesp).build());
+
+            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stations), true);
+
+            log.info("getStationByGpsNoRoute() end");
+
+            return stations;
+        } catch (BusinessException e) {
+            log.info("getStationByGpsNoRoute() error");
+            log.error(e.getMessage());
+
+            sendEmail("getStationByGpsNoRoute接口请求异常", "异常信息：" + e.getMessage());
+
+            addAtisInvokeLog(exceptLog);
+        } catch (RemoteException e) {
+            log.info("getStationByGpsNoRoute() error");
+            log.error(e.getMessage());
+
+            sendEmail("getStationByGpsNoRoute接口请求异常", "异常信息：" + e.getMessage());
+
+            addAtisInvokeLog(exceptLog);
+        }
+
+        return null;
+    }
+
+    /**
+     * 发送邮件
+     * @param subject 邮件主题
+     * @param content 邮件内容
+     */
+    private void sendEmail(String subject, String content) {
+        mailFacade.sendSimpleEmail(subject, content);
+    }
+
+    /**
+     * 新增Atis接口调用日志记录
+     * @param atisInvokeLog Atis接口调用日志记录
+     */
+    private void addAtisInvokeLog(AtisInvokeLog atisInvokeLog) {
+        atisInvokeLogFacade.insertSelective(atisInvokeLog);
     }
 }
