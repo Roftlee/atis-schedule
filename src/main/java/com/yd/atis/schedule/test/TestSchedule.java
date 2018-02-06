@@ -87,9 +87,10 @@ public class TestSchedule {
 
             FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stations), true);
 
-            AtisInvokeLog record = AtisInvokeLog.builder().invokeFunc("test").invokeParam(JsonUtils.toJson(stationRequest))
-                    .invokeStatus(1).build();
-            atisInvokeLogFacade.insertSelective(record);
+            AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("Test")
+                    .invokeParam(JsonUtils.toJson(stationRequest)).invokeStatus(0).exceptDesp("测试接口调用异常")
+                    .exceptType(1).invokeTime(new Date()).build();
+            atisInvokeLogFacade.insertSelective(exceptLog);
 
             log.info("excute test() end");
 

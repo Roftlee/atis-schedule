@@ -134,7 +134,7 @@ public class BasicSchedule {
 
         AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("getStationInfo")
                 .invokeParam(JsonUtils.toJson(stationRequest)).invokeStatus(0).exceptDesp("接口调用异常")
-                .invokeTime(new Date()).build();
+                .exceptType(1).invokeTime(new Date()).build();
 
         try {
             String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getStationInfo" + SysConstant.LOG_FILE_SUFFIX;
@@ -191,7 +191,7 @@ public class BasicSchedule {
 
         AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("getStationInfoNoRoute")
                 .invokeParam(JsonUtils.toJson(stationRequest)).invokeStatus(0).exceptDesp("接口调用异常")
-                .invokeTime(new Date()).build();
+                .exceptType(1).invokeTime(new Date()).build();
 
         try {
 
@@ -246,7 +246,7 @@ public class BasicSchedule {
         log.info("start to excute getAllStation()");
 
         AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("getAllStation")
-                .invokeTime(new Date()).invokeStatus(0).exceptDesp("接口调用异常").build();
+                .exceptType(1).invokeTime(new Date()).invokeStatus(0).exceptDesp("接口调用异常").build();
 
         try {
 
@@ -299,7 +299,7 @@ public class BasicSchedule {
         log.info("start to excute getAllStationNoRoute()");
 
         AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("getAllStationNoRoute")
-                .invokeStatus(0).exceptDesp("接口调用异常").build();
+                .exceptType(1).invokeStatus(0).exceptDesp("接口调用异常").build();
 
         try {
 
@@ -355,7 +355,7 @@ public class BasicSchedule {
 
         AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("getRouteInfo")
                 .invokeParam(JsonUtils.toJson(routeRequest)).invokeStatus(0).exceptDesp("接口调用异常")
-                .invokeTime(new Date()).build();
+                .exceptType(1).invokeTime(new Date()).build();
 
         try {
             String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getRouteInfo" + SysConstant.LOG_FILE_SUFFIX;
@@ -412,7 +412,7 @@ public class BasicSchedule {
 
         AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("getSegmentByRoute")
                 .invokeParam(JsonUtils.toJson(routeRequest)).invokeStatus(0).exceptDesp("接口调用异常")
-                .invokeTime(new Date()).build();
+                .exceptType(1).invokeTime(new Date()).build();
 
         try {
             String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getSegmentByRoute" + SysConstant.LOG_FILE_SUFFIX;
@@ -469,7 +469,7 @@ public class BasicSchedule {
 
         AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("getRouteByStation")
                 .invokeParam(JsonUtils.toJson(stationRequest)).invokeStatus(0).exceptDesp("接口调用异常")
-                .invokeTime(new Date()).build();
+                .exceptType(1).invokeTime(new Date()).build();
 
         try {
             String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getRouteByStation" + SysConstant.LOG_FILE_SUFFIX;
@@ -526,7 +526,7 @@ public class BasicSchedule {
 
         AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("getStationBySegment")
                 .invokeParam(JsonUtils.toJson(segmentRequest)).invokeStatus(0).exceptDesp("接口调用异常")
-                .invokeTime(new Date()).build();
+                .exceptType(1).invokeTime(new Date()).build();
 
         try {
             String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getStationBySegment" + SysConstant.LOG_FILE_SUFFIX;
@@ -583,7 +583,7 @@ public class BasicSchedule {
 
         AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("getStationByGps")
                 .invokeParam(JsonUtils.toJson(stationRequest)).invokeStatus(0).exceptDesp("接口调用异常")
-                .invokeTime(new Date()).build();
+                .exceptType(1).invokeTime(new Date()).build();
 
         try {
             String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getStationByGps" + SysConstant.LOG_FILE_SUFFIX;
@@ -641,7 +641,7 @@ public class BasicSchedule {
 
         AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("getStationByGpsNoRoute")
                 .invokeParam(JsonUtils.toJson(stationRequest)).invokeStatus(0).exceptDesp("接口调用异常")
-                .invokeTime(new Date()).build();
+                .exceptType(1).invokeTime(new Date()).build();
 
         try {
             String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/basic/getStationByGpsNoRoute" + SysConstant.LOG_FILE_SUFFIX;

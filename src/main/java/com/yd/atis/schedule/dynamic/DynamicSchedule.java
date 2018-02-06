@@ -122,7 +122,7 @@ public class DynamicSchedule {
 
         AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("queryByStationID")
                 .invokeParam(JsonUtils.toJson(stationRequest)).invokeStatus(0).exceptDesp("接口调用异常")
-                .invokeTime(new Date()).build();
+                .exceptType(1).invokeTime(new Date()).build();
 
         try {
 
@@ -184,7 +184,7 @@ public class DynamicSchedule {
 
         AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("queryByStationID2")
                 .invokeParam(JsonUtils.toJson(stationRequest)).invokeStatus(0).exceptDesp("接口调用异常")
-                .invokeTime(new Date()).build();
+                .exceptType(1).invokeTime(new Date()).build();
 
         try {
 
@@ -245,7 +245,7 @@ public class DynamicSchedule {
 
         AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("requireBusPosition")
                 .invokeParam(JsonUtils.toJson(stationRequest)).invokeStatus(0).exceptDesp("接口调用异常")
-                .invokeTime(new Date()).build();
+                .exceptType(1).invokeTime(new Date()).build();
 
         try {
 
@@ -305,7 +305,7 @@ public class DynamicSchedule {
 
         AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("queryDetailByRouteId")
                 .invokeParam(JsonUtils.toJson(segmentRequest)).invokeStatus(0).exceptDesp("接口调用异常")
-                .invokeTime(new Date()).build();
+                .exceptType(1).invokeTime(new Date()).build();
 
         try {
             String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/dynamic/queryDetailByRouteID" + SysConstant.LOG_FILE_SUFFIX;
@@ -364,7 +364,7 @@ public class DynamicSchedule {
 
         AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("queryDetailByRouteID2")
                 .invokeParam(JsonUtils.toJson(segmentRequest)).invokeStatus(0).exceptDesp("接口调用异常")
-                .invokeTime(new Date()).build();
+                .exceptType(1).invokeTime(new Date()).build();
 
         try {
 
@@ -424,7 +424,7 @@ public class DynamicSchedule {
 
         AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("requireRouteSpeed")
                 .invokeParam(JsonUtils.toJson(segmentRequest)).invokeStatus(0).exceptDesp("接口调用异常")
-                .invokeTime(new Date()).build();
+                .exceptType(1).invokeTime(new Date()).build();
 
         try {
             String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/dynamic/requireRouteSpeed" + SysConstant.LOG_FILE_SUFFIX;

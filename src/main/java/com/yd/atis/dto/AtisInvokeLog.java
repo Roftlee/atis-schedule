@@ -20,6 +20,8 @@ public class AtisInvokeLog {
 
     private Integer invokeStatus;
 
+    private Integer exceptType;
+
     private String exceptDesp;
 
     private Date createdTime;
