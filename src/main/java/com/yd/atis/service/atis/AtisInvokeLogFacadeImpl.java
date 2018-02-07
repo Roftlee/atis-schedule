@@ -2,7 +2,7 @@ package com.yd.atis.service.atisInvokeLog;
 
 import com.yd.atis.dao.AtisInvokeLogMapper;
 import com.yd.atis.dto.AtisInvokeLog;
-import com.yd.atis.facade.atisInvokeLog.AtisInvokeLogFacade;
+import com.yd.atis.facade.atis.AtisInvokeLogFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
