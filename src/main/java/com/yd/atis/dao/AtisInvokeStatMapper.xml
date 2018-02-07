@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yd.atis.dao.AtisInvokeStatMapper">
+
+    <resultMap id="BaseResultMap" type="com.yd.atis.dto.AtisInvokeStat">
+        <result column="invoke_func" property="invokeFunc" />
+        <result column="today_invoke" property="todayInvoke" />
+        <result column="today_empty" property="todayEmpty" />
+        <result column="today_except" property="todayExcept" />
+        <result column="total_invoke" property="totalInvoke" />
+        <result column="total_empty" property="totalEmpty" />
+        <result column="total_except" property="totalExcept" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        invoke_func, today_invoke, today_empty, today_except, total_invoke, total_empty, total_except
+    </sql>
+
+    <select id="queryAtisInvokeStatList" resultMap="BaseResultMap">
+        SELECT
+            today.invoke_func,
+            today.today_invoke,
+            IFNULL(empty.empty_return, 0) as today_empty,
+            IFNULL(except.except_invoke, 0) as today_except,
+            total.total_invoke,
+            IFNULL(t_empty.total_empty, 0) as total_empty,
+            IFNULL(t_except.total_except, 0) as total_except
+        FROM
+            (
+                SELECT
+                    a.invoke_func,
+                    count(1) today_invoke
+                FROM
+                    atis_invoke_log a
+                WHERE
+                    DATE(a.invoke_time) = CURDATE()
+                GROUP BY
+                    a.invoke_func
+            ) today
+        LEFT JOIN (
+            SELECT
+                b.invoke_func,
+                count(1) empty_return
+            FROM
+                atis_invoke_log b
+            WHERE
+                b.invoke_status = 0
+            AND b.except_type = 0
+            AND DATE(b.invoke_time) = CURDATE()
+            GROUP BY
+                b.invoke_func
+        ) empty ON today.invoke_func = empty.invoke_func
+        LEFT JOIN (
+            SELECT
+                c.invoke_func,
+                count(1) except_invoke
+            FROM
+                atis_invoke_log c
+            WHERE
+                c.invoke_status = 0
+            AND c.except_type = 1
+            AND DATE(c.invoke_time) = CURDATE()
+            GROUP BY
+                c.invoke_func
+        ) except ON today.invoke_func = except.invoke_func
+        LEFT JOIN (
+            SELECT
+                d.invoke_func,
+                count(1) total_invoke
+            FROM
+                atis_invoke_log d
+            GROUP BY
+                d.invoke_func
+        ) total ON today.invoke_func = total.invoke_func
+        LEFT JOIN (
+            SELECT
+                e.invoke_func,
+                count(1) total_empty
+            FROM
+                atis_invoke_log e
+            WHERE
+                e.invoke_status = 0
+            AND e.except_type = 0
+            GROUP BY
+                e.invoke_func
+        ) t_empty ON today.invoke_func = t_empty.invoke_func
+        LEFT JOIN (
+            SELECT
+                f.invoke_func,
+                count(1) total_except
+            FROM
+                atis_invoke_log f
+            WHERE
+                f.invoke_status = 0
+            AND f.except_type = 1
+            GROUP BY
+                f.invoke_func
+        ) t_except ON today.invoke_func = t_except.invoke_func
+    </select>
+</mapper>

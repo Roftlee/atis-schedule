@@ -6,7 +6,7 @@ import com.yd.atis.dao.SegmentInfoMapper;
 import com.yd.atis.dao.StationInfoMapper;
 import com.yd.atis.dao.StationSegmentRelationMapper;
 import com.yd.atis.dto.*;
-import com.yd.atis.facade.atisInvokeLog.AtisInvokeLogFacade;
+import com.yd.atis.facade.atis.AtisInvokeLogFacade;
 import com.yd.atis.facade.mail.MailFacade;
 import com.yd.atis.model.StationInfoEntity;
 import com.yd.atis.request.station.StationRequest;
@@ -18,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;

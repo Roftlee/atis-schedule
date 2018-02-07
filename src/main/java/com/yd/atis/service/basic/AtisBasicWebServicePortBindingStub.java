@@ -5,7 +5,7 @@
  * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
  */
 
-package com.yd.atis.service.basicService;
+package com.yd.atis.service.basic;
 
 import com.yd.atis.model.*;
 

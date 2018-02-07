@@ -14,7 +14,9 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
 import javax.mail.internet.MimeMessage;
 import java.io.File;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -39,11 +41,14 @@ public class MailFacadeImpl implements MailFacade {
 
     @Override
     public void sendSimpleEmail(String subject, String content){
+        String[] toList = mailTo.split(",");
+
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(sender);
-        message.setTo(mailTo);
+        message.setTo(toList);
         message.setSubject(subject);
         message.setText(content);
+
         mailSender.send(message);
     }
 
@@ -51,17 +56,14 @@ public class MailFacadeImpl implements MailFacade {
     public void sendHtmlMail(String subject, String content){
         MimeMessage message = null;
         try {
+            String[] toList = mailTo.split(",");
+
             message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             helper.setFrom(sender);
-            helper.setTo(mailTo);
-            helper.setSubject("标题：发送Html内容");
-
-            StringBuffer sb = new StringBuffer();
-            sb.append("<h1>大标题-h1</h1>")
-                    .append("<p style='color:#F00'>红色字</p>")
-                    .append("<p style='text-align:right'>右对齐</p>");
-            helper.setText(sb.toString(), true);
+            helper.setTo(toList);
+            helper.setSubject(subject);
+            helper.setText(content, true);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -72,10 +74,12 @@ public class MailFacadeImpl implements MailFacade {
     public void sendAttachmentsMail(String subject, String content){
         MimeMessage message = null;
         try {
+            String[] toList = mailTo.split(",");
+
             message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             helper.setFrom(sender);
-            helper.setTo(mailTo);
+            helper.setTo(toList);
             helper.setSubject("主题：带附件的邮件");
             helper.setText("带附件的邮件内容");
             //注意项目路径问题，自动补用项目路径
@@ -92,10 +96,12 @@ public class MailFacadeImpl implements MailFacade {
     public void sendInlineMail(String subject, String content){
         MimeMessage message = null;
         try {
+            String[] toList = mailTo.split(",");
+
             message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             helper.setFrom(sender);
-            helper.setTo(mailTo);
+            helper.setTo(toList);
             helper.setSubject("主题：带静态资源的邮件");
             //第二个参数指定发送的是HTML格式,同时cid:是固定的写法
             helper.setText("<html><body>带静态资源的邮件内容 图片:<img src='cid:picture' /></body></html>", true);
@@ -112,10 +118,12 @@ public class MailFacadeImpl implements MailFacade {
     public void sendTemplateMail(String subject, String content){
         MimeMessage message = null;
         try {
+            String[] toList = mailTo.split(",");
+
             message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             helper.setFrom(sender);
-            helper.setTo(mailTo);
+            helper.setTo(toList);
             helper.setSubject("主题：模板邮件");
 
             Map<String, Object> model = new HashMap();

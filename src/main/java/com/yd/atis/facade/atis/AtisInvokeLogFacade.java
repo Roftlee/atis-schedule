@@ -1,4 +1,4 @@
-package com.yd.atis.facade.atisInvokeLog;
+package com.yd.atis.facade.atis;
 
 import com.yd.atis.dto.AtisInvokeLog;
 
