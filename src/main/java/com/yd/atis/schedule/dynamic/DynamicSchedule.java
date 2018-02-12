@@ -8,10 +8,7 @@ import com.yd.atis.dao.StationSegmentRelationMapper;
 import com.yd.atis.dto.*;
 import com.yd.atis.facade.atis.AtisInvokeLogFacade;
 import com.yd.atis.facade.mail.MailFacade;
-import com.yd.atis.model.ArriveStationBusEntity;
-import com.yd.atis.model.BusinessException;
-import com.yd.atis.model.RealTimeInfo;
-import com.yd.atis.model.StationInfoEntity;
+import com.yd.atis.model.*;
 import com.yd.atis.request.segment.SegmentRequest;
 import com.yd.atis.request.station.StationRequest;
 import com.yd.atis.service.dynamic.AtisDynamicWebService_PortType;
@@ -104,6 +101,10 @@ public class DynamicSchedule {
 
         //查询线路路段速度
         requireRouteSpeed();
+
+        querAllBusLastStation();
+
+        queryAllBusLastPosition();
 
         log.info("Atis dynamic task end!");
     }
@@ -462,6 +463,118 @@ public class DynamicSchedule {
             log.error(e.getMessage());
 
             sendEmail("requireRouteSpeed接口请求异常", "异常信息：" + e.getMessage());
+
+            addAtisInvokeLog(exceptLog);
+        }
+
+        return null;
+    }
+
+    /**
+     * 查询线路车辆路段速度信息
+     * @return
+     */
+    private RealTimeInfo[] querAllBusLastStation() {
+
+        log.info("start to excute querAllBusLastStation()");
+
+        int lastMinutes = new Random().nextInt(10) + 1;//1到10分钟
+
+        AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("querAllBusLastStation")
+                .invokeParam("lastMinutes:" + lastMinutes).invokeStatus(0).exceptDesp("接口调用异常")
+                .exceptType(1).invokeTime(new Date()).build();
+
+        try {
+            String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/dynamic/querAllBusLastStation" + SysConstant.LOG_FILE_SUFFIX;
+            FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + "lastMinutes:" + lastMinutes, true);
+
+            //查询线路路段速度
+            RealTimeInfo[] realTimeInfos = dynamicService.querAllBusLastStation(lastMinutes, username, password);
+
+            Integer invokeStatus = 1;
+            String exceptDesp = "";
+            if (realTimeInfos == null || realTimeInfos.length == 0) {
+                invokeStatus = 0;
+                exceptDesp = "接口返回结果为空";
+            }
+
+            addAtisInvokeLog(AtisInvokeLog.builder().invokeFunc("querAllBusLastStation")
+                    .invokeParam("lastMinutes:" + lastMinutes).invokeStatus(invokeStatus).exceptDesp(exceptDesp)
+                    .build());
+
+            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(realTimeInfos), true);
+
+            log.info("querAllBusLastStation() end");
+
+            return realTimeInfos;
+        } catch (BusinessException e) {
+            log.info("querAllBusLastStation() error");
+            log.error(e.getMessage());
+
+            sendEmail("querAllBusLastStation接口请求异常", "异常信息：" + e.getMessage());
+
+            addAtisInvokeLog(exceptLog);
+        } catch (RemoteException e) {
+            log.info("querAllBusLastStation() error");
+            log.error(e.getMessage());
+
+            sendEmail("querAllBusLastStation接口请求异常", "异常信息：" + e.getMessage());
+
+            addAtisInvokeLog(exceptLog);
+        }
+
+        return null;
+    }
+
+    /**
+     * 查询线路车辆路段速度信息
+     * @return
+     */
+    private BusLastPositionDataEntity[] queryAllBusLastPosition() {
+
+        log.info("start to excute queryAllBusLastPosition()");
+
+        int lastMinutes = new Random().nextInt(10) + 1;//1到10分钟
+
+        AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("queryAllBusLastPosition")
+                .invokeParam("lastMinutes:" + lastMinutes).invokeStatus(0).exceptDesp("接口调用异常")
+                .exceptType(1).invokeTime(new Date()).build();
+
+        try {
+            String fileName = logPath + DateUtils.format(new Date(), "yyyyMMdd") + "/dynamic/queryAllBusLastPosition" + SysConstant.LOG_FILE_SUFFIX;
+            FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + "lastMinutes:" + lastMinutes, true);
+
+            //查询线路路段速度
+            BusLastPositionDataEntity[] busLastPositionDataEntities = dynamicService.queryAllBusLastPosition(lastMinutes, username, password);
+
+            Integer invokeStatus = 1;
+            String exceptDesp = "";
+            if (busLastPositionDataEntities == null || busLastPositionDataEntities.length == 0) {
+                invokeStatus = 0;
+                exceptDesp = "接口返回结果为空";
+            }
+
+            addAtisInvokeLog(AtisInvokeLog.builder().invokeFunc("queryAllBusLastPosition")
+                    .invokeParam("lastMinutes:" + lastMinutes).invokeStatus(invokeStatus).exceptDesp(exceptDesp)
+                    .build());
+
+            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(busLastPositionDataEntities), true);
+
+            log.info("queryAllBusLastPosition() end");
+
+            return busLastPositionDataEntities;
+        } catch (BusinessException e) {
+            log.info("queryAllBusLastPosition() error");
+            log.error(e.getMessage());
+
+            sendEmail("queryAllBusLastPosition接口请求异常", "异常信息：" + e.getMessage());
+
+            addAtisInvokeLog(exceptLog);
+        } catch (RemoteException e) {
+            log.info("queryAllBusLastPosition() error");
+            log.error(e.getMessage());
+
+            sendEmail("queryAllBusLastPosition接口请求异常", "异常信息：" + e.getMessage());
 
             addAtisInvokeLog(exceptLog);
         }

@@ -116,6 +116,8 @@ public class BasicSchedule {
         //按位置查找站点
         getStationByGps();
 
+        getStationByGpsNoRoute();
+
         log.info("Atis basic task end!");
 
     }
