@@ -7,10 +7,7 @@
 
 package com.yd.atis.service.dynamic;
 
-import com.yd.atis.model.ArriveStationBusEntity;
-import com.yd.atis.model.BusinessException;
-import com.yd.atis.model.RealTimeInfo;
-import com.yd.atis.model.StationInfoEntity;
+import com.yd.atis.model.*;
 
 public class AtisDynamicWebServicePortBindingStub extends org.apache.axis.client.Stub implements AtisDynamicWebService_PortType {
     private java.util.Vector cachedSerClasses = new java.util.Vector();
@@ -21,13 +18,59 @@ public class AtisDynamicWebServicePortBindingStub extends org.apache.axis.client
     static org.apache.axis.description.OperationDesc [] _operations;
 
     static {
-        _operations = new org.apache.axis.description.OperationDesc[6];
+        _operations = new org.apache.axis.description.OperationDesc[8];
         _initOperationDesc1();
     }
 
     private static void _initOperationDesc1(){
         org.apache.axis.description.OperationDesc oper;
         org.apache.axis.description.ParameterDesc param;
+        oper = new org.apache.axis.description.OperationDesc();
+        oper.setName("QueryAllBusLastPosition");
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "lastMinutes"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "name"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), String.class, false, false);
+        param.setOmittable(true);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "password"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), String.class, false, false);
+        param.setOmittable(true);
+        oper.addParameter(param);
+        oper.setReturnType(new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "busLastPositionDataEntity"));
+        oper.setReturnClass(BusLastPositionDataEntity[].class);
+        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
+        oper.setUse(org.apache.axis.constants.Use.LITERAL);
+        oper.addFault(new org.apache.axis.description.FaultDesc(
+                      new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"),
+                      "BusinessException",
+                      new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"), 
+                      true
+                     ));
+        _operations[0] = oper;
+
+        oper = new org.apache.axis.description.OperationDesc();
+        oper.setName("QuerAllBusLastStation");
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "lastMinutes"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "name"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), String.class, false, false);
+        param.setOmittable(true);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "password"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), String.class, false, false);
+        param.setOmittable(true);
+        oper.addParameter(param);
+        oper.setReturnType(new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "realTimeInfo"));
+        oper.setReturnClass(RealTimeInfo[].class);
+        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
+        oper.setUse(org.apache.axis.constants.Use.LITERAL);
+        oper.addFault(new org.apache.axis.description.FaultDesc(
+                      new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"),
+                      "BusinessException",
+                      new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"), 
+                      true
+                     ));
+        _operations[1] = oper;
+
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("queryByStationID2");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "routeID"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), String.class, false, false);
@@ -55,10 +98,10 @@ public class AtisDynamicWebServicePortBindingStub extends org.apache.axis.client
         oper.addFault(new org.apache.axis.description.FaultDesc(
                       new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"),
                       "BusinessException",
-                      new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"),
+                      new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"), 
                       true
                      ));
-        _operations[0] = oper;
+        _operations[2] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("queryDetailByRouteID2");
@@ -87,10 +130,10 @@ public class AtisDynamicWebServicePortBindingStub extends org.apache.axis.client
         oper.addFault(new org.apache.axis.description.FaultDesc(
                       new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"),
                       "BusinessException",
-                      new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"),
+                      new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"), 
                       true
                      ));
-        _operations[1] = oper;
+        _operations[3] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("queryDetailByRouteID");
@@ -117,10 +160,10 @@ public class AtisDynamicWebServicePortBindingStub extends org.apache.axis.client
         oper.addFault(new org.apache.axis.description.FaultDesc(
                       new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"),
                       "BusinessException",
-                      new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"),
+                      new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"), 
                       true
                      ));
-        _operations[2] = oper;
+        _operations[4] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("requireRouteSpeed");
@@ -141,10 +184,10 @@ public class AtisDynamicWebServicePortBindingStub extends org.apache.axis.client
         oper.addFault(new org.apache.axis.description.FaultDesc(
                       new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"),
                       "BusinessException",
-                      new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"),
+                      new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"), 
                       true
                      ));
-        _operations[3] = oper;
+        _operations[5] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("requireBusPosition");
@@ -171,10 +214,10 @@ public class AtisDynamicWebServicePortBindingStub extends org.apache.axis.client
         oper.addFault(new org.apache.axis.description.FaultDesc(
                       new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"),
                       "BusinessException",
-                      new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"),
+                      new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"), 
                       true
                      ));
-        _operations[4] = oper;
+        _operations[6] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("queryByStationID");
@@ -201,10 +244,10 @@ public class AtisDynamicWebServicePortBindingStub extends org.apache.axis.client
         oper.addFault(new org.apache.axis.description.FaultDesc(
                       new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"),
                       "BusinessException",
-                      new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"),
+                      new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"), 
                       true
                      ));
-        _operations[5] = oper;
+        _operations[7] = oper;
 
     }
 
@@ -247,6 +290,13 @@ public class AtisDynamicWebServicePortBindingStub extends org.apache.axis.client
             qName = new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException");
             cachedSerQNames.add(qName);
             cls = BusinessException.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
+            qName = new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "busLastPositionDataEntity");
+            cachedSerQNames.add(qName);
+            cls = BusLastPositionDataEntity.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
@@ -331,12 +381,96 @@ public class AtisDynamicWebServicePortBindingStub extends org.apache.axis.client
         }
     }
 
-    public ArriveStationBusEntity[] queryByStationID2(String routeID, String segmentID, String stationID, int arriveLeaveType, String name, String password) throws java.rmi.RemoteException, BusinessException {
+    public BusLastPositionDataEntity[] queryAllBusLastPosition(int lastMinutes, String name, String password) throws java.rmi.RemoteException, BusinessException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
         _call.setOperation(_operations[0]);
+        _call.setUseSOAPAction(true);
+        _call.setSOAPActionURI("");
+        _call.setEncodingStyle(null);
+        _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
+        _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
+        _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
+        _call.setOperationName(new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "QueryAllBusLastPosition"));
+
+        setRequestHeaders(_call);
+        setAttachments(_call);
+ try {        Object _resp = _call.invoke(new Object[] {new Integer(lastMinutes), name, password});
+
+        if (_resp instanceof java.rmi.RemoteException) {
+            throw (java.rmi.RemoteException)_resp;
+        }
+        else {
+            extractAttachments(_call);
+            try {
+                return (BusLastPositionDataEntity[]) _resp;
+            } catch (Exception _exception) {
+                return (BusLastPositionDataEntity[]) org.apache.axis.utils.JavaUtils.convert(_resp, BusLastPositionDataEntity[].class);
+            }
+        }
+  } catch (org.apache.axis.AxisFault axisFaultException) {
+    if (axisFaultException.detail != null) {
+        if (axisFaultException.detail instanceof java.rmi.RemoteException) {
+              throw (java.rmi.RemoteException) axisFaultException.detail;
+         }
+        if (axisFaultException.detail instanceof BusinessException) {
+              throw (BusinessException) axisFaultException.detail;
+         }
+   }
+  throw axisFaultException;
+}
+    }
+
+    public RealTimeInfo[] querAllBusLastStation(int lastMinutes, String name, String password) throws java.rmi.RemoteException, BusinessException {
+        if (super.cachedEndpoint == null) {
+            throw new org.apache.axis.NoEndPointException();
+        }
+        org.apache.axis.client.Call _call = createCall();
+        _call.setOperation(_operations[1]);
+        _call.setUseSOAPAction(true);
+        _call.setSOAPActionURI("");
+        _call.setEncodingStyle(null);
+        _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
+        _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
+        _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
+        _call.setOperationName(new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "QuerAllBusLastStation"));
+
+        setRequestHeaders(_call);
+        setAttachments(_call);
+ try {        Object _resp = _call.invoke(new Object[] {new Integer(lastMinutes), name, password});
+
+        if (_resp instanceof java.rmi.RemoteException) {
+            throw (java.rmi.RemoteException)_resp;
+        }
+        else {
+            extractAttachments(_call);
+            try {
+                return (RealTimeInfo[]) _resp;
+            } catch (Exception _exception) {
+                return (RealTimeInfo[]) org.apache.axis.utils.JavaUtils.convert(_resp, RealTimeInfo[].class);
+            }
+        }
+  } catch (org.apache.axis.AxisFault axisFaultException) {
+    if (axisFaultException.detail != null) {
+        if (axisFaultException.detail instanceof java.rmi.RemoteException) {
+              throw (java.rmi.RemoteException) axisFaultException.detail;
+         }
+        if (axisFaultException.detail instanceof BusinessException) {
+              throw (BusinessException) axisFaultException.detail;
+         }
+   }
+  throw axisFaultException;
+}
+    }
+
+    public ArriveStationBusEntity[] queryByStationID2(String routeID, String segmentID, String stationID, int arriveLeaveType, String name, String password) throws java.rmi.RemoteException, BusinessException {
+        if (super.cachedEndpoint == null) {
+            throw new org.apache.axis.NoEndPointException();
+        }
+        org.apache.axis.client.Call _call = createCall();
+        _call.setOperation(_operations[2]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
         _call.setEncodingStyle(null);
@@ -378,7 +512,7 @@ public class AtisDynamicWebServicePortBindingStub extends org.apache.axis.client
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[1]);
+        _call.setOperation(_operations[3]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
         _call.setEncodingStyle(null);
@@ -420,7 +554,7 @@ public class AtisDynamicWebServicePortBindingStub extends org.apache.axis.client
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[2]);
+        _call.setOperation(_operations[4]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
         _call.setEncodingStyle(null);
@@ -462,7 +596,7 @@ public class AtisDynamicWebServicePortBindingStub extends org.apache.axis.client
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[3]);
+        _call.setOperation(_operations[5]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
         _call.setEncodingStyle(null);
@@ -504,7 +638,7 @@ public class AtisDynamicWebServicePortBindingStub extends org.apache.axis.client
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[4]);
+        _call.setOperation(_operations[6]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
         _call.setEncodingStyle(null);
@@ -546,7 +680,7 @@ public class AtisDynamicWebServicePortBindingStub extends org.apache.axis.client
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[5]);
+        _call.setOperation(_operations[7]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
         _call.setEncodingStyle(null);

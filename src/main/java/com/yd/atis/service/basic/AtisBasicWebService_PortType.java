@@ -13,6 +13,7 @@ public interface AtisBasicWebService_PortType extends java.rmi.Remote {
     public StationInfoEntity[] getAllStation(String name, String password) throws java.rmi.RemoteException, BusinessException;
     public StationInfoEntity[] getAllStationNoRoute(String name, String password) throws java.rmi.RemoteException, BusinessException;
     public StationInfoEntity[] getStationInfoNoRoute(String stationId, String stationName, String name, String password) throws java.rmi.RemoteException, BusinessException;
+    public StationInfoEntity[] getStationByGpsNoRoute(Double longitude, Double latitude, Double lonRange, Double latRange, String name, String password) throws java.rmi.RemoteException, BusinessException;
     public SegmentInfoEntity[] getSegmentByRoute(String routeId, String name, String password) throws java.rmi.RemoteException, BusinessException;
     public StationInfoEntity[] getStationBySegment(String segmengtID, String name, String password) throws java.rmi.RemoteException, BusinessException;
     public StationInfoEntity[] getStationInfo(String stationId, String stationName, String name, String password) throws java.rmi.RemoteException, BusinessException;

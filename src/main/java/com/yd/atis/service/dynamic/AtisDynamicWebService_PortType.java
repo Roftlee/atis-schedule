@@ -7,12 +7,15 @@
 
 package com.yd.atis.service.dynamic;
 
+import com.yd.atis.model.BusLastPositionDataEntity;
 import com.yd.atis.model.ArriveStationBusEntity;
 import com.yd.atis.model.BusinessException;
 import com.yd.atis.model.RealTimeInfo;
 import com.yd.atis.model.StationInfoEntity;
 
 public interface AtisDynamicWebService_PortType extends java.rmi.Remote {
+    public BusLastPositionDataEntity[] queryAllBusLastPosition(int lastMinutes, String name, String password) throws java.rmi.RemoteException, BusinessException;
+    public RealTimeInfo[] querAllBusLastStation(int lastMinutes, String name, String password) throws java.rmi.RemoteException, BusinessException;
     public ArriveStationBusEntity[] queryByStationID2(String routeID, String segmentID, String stationID, int arriveLeaveType, String name, String password) throws java.rmi.RemoteException, BusinessException;
     public RealTimeInfo[] queryDetailByRouteID2(String routeID, String stationID, String segmentID, int arriveLeaveType, String name, String password) throws java.rmi.RemoteException, BusinessException;
     public RealTimeInfo[] queryDetailByRouteID(String routeID, String stationID, String segmentID, String name, String password) throws java.rmi.RemoteException, BusinessException;

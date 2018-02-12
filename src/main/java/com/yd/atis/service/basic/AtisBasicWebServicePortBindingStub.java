@@ -18,7 +18,7 @@ public class AtisBasicWebServicePortBindingStub extends org.apache.axis.client.S
     static org.apache.axis.description.OperationDesc [] _operations;
 
     static {
-        _operations = new org.apache.axis.description.OperationDesc[11];
+        _operations = new org.apache.axis.description.OperationDesc[12];
         _initOperationDesc1();
         _initOperationDesc2();
     }
@@ -42,7 +42,7 @@ public class AtisBasicWebServicePortBindingStub extends org.apache.axis.client.S
         oper.addFault(new org.apache.axis.description.FaultDesc(
                       new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"),
                       "BusinessException",
-                      new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"),
+                      new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"), 
                       true
                      ));
         _operations[0] = oper;
@@ -63,7 +63,7 @@ public class AtisBasicWebServicePortBindingStub extends org.apache.axis.client.S
         oper.addFault(new org.apache.axis.description.FaultDesc(
                       new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"),
                       "BusinessException",
-                      new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"),
+                      new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"), 
                       true
                      ));
         _operations[1] = oper;
@@ -90,10 +90,43 @@ public class AtisBasicWebServicePortBindingStub extends org.apache.axis.client.S
         oper.addFault(new org.apache.axis.description.FaultDesc(
                       new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"),
                       "BusinessException",
-                      new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"),
+                      new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"), 
                       true
                      ));
         _operations[2] = oper;
+
+        oper = new org.apache.axis.description.OperationDesc();
+        oper.setName("getStationByGpsNoRoute");
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "longitude"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "double"), Double.class, false, false);
+        param.setOmittable(true);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "latitude"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "double"), Double.class, false, false);
+        param.setOmittable(true);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "lonRange"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "double"), Double.class, false, false);
+        param.setOmittable(true);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "latRange"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "double"), Double.class, false, false);
+        param.setOmittable(true);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "name"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), String.class, false, false);
+        param.setOmittable(true);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "password"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), String.class, false, false);
+        param.setOmittable(true);
+        oper.addParameter(param);
+        oper.setReturnType(new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "stationInfoEntity"));
+        oper.setReturnClass(StationInfoEntity[].class);
+        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
+        oper.setUse(org.apache.axis.constants.Use.LITERAL);
+        oper.addFault(new org.apache.axis.description.FaultDesc(
+                      new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"),
+                      "BusinessException",
+                      new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"), 
+                      true
+                     ));
+        _operations[3] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getSegmentByRoute");
@@ -114,10 +147,10 @@ public class AtisBasicWebServicePortBindingStub extends org.apache.axis.client.S
         oper.addFault(new org.apache.axis.description.FaultDesc(
                       new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"),
                       "BusinessException",
-                      new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"),
+                      new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"), 
                       true
                      ));
-        _operations[3] = oper;
+        _operations[4] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getStationBySegment");
@@ -138,10 +171,10 @@ public class AtisBasicWebServicePortBindingStub extends org.apache.axis.client.S
         oper.addFault(new org.apache.axis.description.FaultDesc(
                       new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"),
                       "BusinessException",
-                      new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"),
+                      new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"), 
                       true
                      ));
-        _operations[4] = oper;
+        _operations[5] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getStationInfo");
@@ -165,10 +198,10 @@ public class AtisBasicWebServicePortBindingStub extends org.apache.axis.client.S
         oper.addFault(new org.apache.axis.description.FaultDesc(
                       new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"),
                       "BusinessException",
-                      new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"),
+                      new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"), 
                       true
                      ));
-        _operations[5] = oper;
+        _operations[6] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getRouteByStation");
@@ -189,10 +222,10 @@ public class AtisBasicWebServicePortBindingStub extends org.apache.axis.client.S
         oper.addFault(new org.apache.axis.description.FaultDesc(
                       new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"),
                       "BusinessException",
-                      new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"),
+                      new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"), 
                       true
                      ));
-        _operations[6] = oper;
+        _operations[7] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getRouteInfo");
@@ -216,10 +249,10 @@ public class AtisBasicWebServicePortBindingStub extends org.apache.axis.client.S
         oper.addFault(new org.apache.axis.description.FaultDesc(
                       new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"),
                       "BusinessException",
-                      new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"),
+                      new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"), 
                       true
                      ));
-        _operations[7] = oper;
+        _operations[8] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getDictByName");
@@ -240,11 +273,16 @@ public class AtisBasicWebServicePortBindingStub extends org.apache.axis.client.S
         oper.addFault(new org.apache.axis.description.FaultDesc(
                       new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"),
                       "BusinessException",
-                      new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"),
+                      new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"), 
                       true
                      ));
-        _operations[8] = oper;
+        _operations[9] = oper;
 
+    }
+
+    private static void _initOperationDesc2(){
+        org.apache.axis.description.OperationDesc oper;
+        org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getAllDictInfo");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "name"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), String.class, false, false);
@@ -261,16 +299,11 @@ public class AtisBasicWebServicePortBindingStub extends org.apache.axis.client.S
         oper.addFault(new org.apache.axis.description.FaultDesc(
                       new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"),
                       "BusinessException",
-                      new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"),
+                      new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"), 
                       true
                      ));
-        _operations[9] = oper;
+        _operations[10] = oper;
 
-    }
-
-    private static void _initOperationDesc2(){
-        org.apache.axis.description.OperationDesc oper;
-        org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getStationByGps");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "longitude"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "double"), Double.class, false, false);
@@ -302,10 +335,10 @@ public class AtisBasicWebServicePortBindingStub extends org.apache.axis.client.S
         oper.addFault(new org.apache.axis.description.FaultDesc(
                       new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"),
                       "BusinessException",
-                      new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"),
+                      new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "BusinessException"), 
                       true
                      ));
-        _operations[10] = oper;
+        _operations[11] = oper;
 
     }
 
@@ -565,12 +598,54 @@ public class AtisBasicWebServicePortBindingStub extends org.apache.axis.client.S
 }
     }
 
-    public SegmentInfoEntity[] getSegmentByRoute(String routeId, String name, String password) throws java.rmi.RemoteException, BusinessException {
+    public StationInfoEntity[] getStationByGpsNoRoute(Double longitude, Double latitude, Double lonRange, Double latRange, String name, String password) throws java.rmi.RemoteException, BusinessException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
         _call.setOperation(_operations[3]);
+        _call.setUseSOAPAction(true);
+        _call.setSOAPActionURI("");
+        _call.setEncodingStyle(null);
+        _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
+        _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
+        _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
+        _call.setOperationName(new javax.xml.namespace.QName("http://webservice.atis.hisense.com/", "getStationByGpsNoRoute"));
+
+        setRequestHeaders(_call);
+        setAttachments(_call);
+ try {        Object _resp = _call.invoke(new Object[] {longitude, latitude, lonRange, latRange, name, password});
+
+        if (_resp instanceof java.rmi.RemoteException) {
+            throw (java.rmi.RemoteException)_resp;
+        }
+        else {
+            extractAttachments(_call);
+            try {
+                return (StationInfoEntity[]) _resp;
+            } catch (Exception _exception) {
+                return (StationInfoEntity[]) org.apache.axis.utils.JavaUtils.convert(_resp, StationInfoEntity[].class);
+            }
+        }
+  } catch (org.apache.axis.AxisFault axisFaultException) {
+    if (axisFaultException.detail != null) {
+        if (axisFaultException.detail instanceof java.rmi.RemoteException) {
+              throw (java.rmi.RemoteException) axisFaultException.detail;
+         }
+        if (axisFaultException.detail instanceof BusinessException) {
+              throw (BusinessException) axisFaultException.detail;
+         }
+   }
+  throw axisFaultException;
+}
+    }
+
+    public SegmentInfoEntity[] getSegmentByRoute(String routeId, String name, String password) throws java.rmi.RemoteException, BusinessException {
+        if (super.cachedEndpoint == null) {
+            throw new org.apache.axis.NoEndPointException();
+        }
+        org.apache.axis.client.Call _call = createCall();
+        _call.setOperation(_operations[4]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
         _call.setEncodingStyle(null);
@@ -612,7 +687,7 @@ public class AtisBasicWebServicePortBindingStub extends org.apache.axis.client.S
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[4]);
+        _call.setOperation(_operations[5]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
         _call.setEncodingStyle(null);
@@ -654,7 +729,7 @@ public class AtisBasicWebServicePortBindingStub extends org.apache.axis.client.S
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[5]);
+        _call.setOperation(_operations[6]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
         _call.setEncodingStyle(null);
@@ -696,7 +771,7 @@ public class AtisBasicWebServicePortBindingStub extends org.apache.axis.client.S
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[6]);
+        _call.setOperation(_operations[7]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
         _call.setEncodingStyle(null);
@@ -738,7 +813,7 @@ public class AtisBasicWebServicePortBindingStub extends org.apache.axis.client.S
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[7]);
+        _call.setOperation(_operations[8]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
         _call.setEncodingStyle(null);
@@ -780,7 +855,7 @@ public class AtisBasicWebServicePortBindingStub extends org.apache.axis.client.S
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[8]);
+        _call.setOperation(_operations[9]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
         _call.setEncodingStyle(null);
@@ -822,7 +897,7 @@ public class AtisBasicWebServicePortBindingStub extends org.apache.axis.client.S
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[9]);
+        _call.setOperation(_operations[10]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
         _call.setEncodingStyle(null);
@@ -864,7 +939,7 @@ public class AtisBasicWebServicePortBindingStub extends org.apache.axis.client.S
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[10]);
+        _call.setOperation(_operations[11]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
         _call.setEncodingStyle(null);
