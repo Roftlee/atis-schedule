@@ -77,7 +77,7 @@ public class DynamicSchedule {
     }
 
     /**
-     * 定时调度任务 每天9点到18点之间每30分钟调用一次
+     * 定时调度任务 每天6点到22点之间每10分钟调用一次
      */
     @Scheduled(cron = "0 0/10 6-22 * * ?")
     public void excuteAtisDynamicService() {
@@ -146,7 +146,7 @@ public class DynamicSchedule {
                     .invokeParam(JsonUtils.toJson(stationRequest)).invokeStatus(invokeStatus).exceptDesp(exceptDesp)
                     .build());
 
-            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(arriveStationBusEntities), true);
+//            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(arriveStationBusEntities), true);
 
             log.info("queryByStationID() end");
 
@@ -208,7 +208,7 @@ public class DynamicSchedule {
                     .invokeParam(JsonUtils.toJson(stationRequest)).invokeStatus(invokeStatus).exceptDesp(exceptDesp)
                     .build());
 
-            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(arriveStationBusEntities), true);
+//            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(arriveStationBusEntities), true);
 
             log.info("queryByStationID2() end");
 
@@ -269,7 +269,7 @@ public class DynamicSchedule {
                     .invokeParam(JsonUtils.toJson(stationRequest)).invokeStatus(invokeStatus).exceptDesp(exceptDesp)
                     .build());
 
-            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(requireBusPositions), true);
+//            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(requireBusPositions), true);
 
             log.info("requireBusPosition() end");
 
@@ -327,7 +327,7 @@ public class DynamicSchedule {
                     .invokeParam(JsonUtils.toJson(segmentRequest)).invokeStatus(invokeStatus).exceptDesp(exceptDesp)
                     .build());
 
-            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(realTimeInfos), true);
+//            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(realTimeInfos), true);
 
             log.info("queryDetailByRouteId() end");
 
@@ -388,7 +388,7 @@ public class DynamicSchedule {
                     .invokeParam(JsonUtils.toJson(segmentRequest)).invokeStatus(invokeStatus).exceptDesp(exceptDesp)
                     .build());
 
-            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(realTimeInfos), true);
+//            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(realTimeInfos), true);
 
             log.info("queryDetailByRouteID2() end");
 
@@ -446,7 +446,7 @@ public class DynamicSchedule {
                     .invokeParam(JsonUtils.toJson(segmentRequest)).invokeStatus(invokeStatus).exceptDesp(exceptDesp)
                     .build());
 
-            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stationInfoEntities), true);
+//            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stationInfoEntities), true);
 
             log.info("requireRouteSpeed() end");
 
@@ -502,7 +502,7 @@ public class DynamicSchedule {
                     .invokeParam("lastMinutes:" + lastMinutes).invokeStatus(invokeStatus).exceptDesp(exceptDesp)
                     .build());
 
-            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(realTimeInfos), true);
+//            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(realTimeInfos), true);
 
             log.info("querAllBusLastStation() end");
 
@@ -558,7 +558,7 @@ public class DynamicSchedule {
                     .invokeParam("lastMinutes:" + lastMinutes).invokeStatus(invokeStatus).exceptDesp(exceptDesp)
                     .build());
 
-            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(busLastPositionDataEntities), true);
+//            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(busLastPositionDataEntities), true);
 
             log.info("queryAllBusLastPosition() end");
 

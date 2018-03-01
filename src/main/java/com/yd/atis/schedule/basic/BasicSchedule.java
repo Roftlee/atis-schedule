@@ -82,7 +82,7 @@ public class BasicSchedule {
     }
 
     /**
-     * 定时调度任务 每天9点到18点之间每30分钟调用一次
+     * 定时调度任务 每天6点到22点之间每10分钟调用一次
      */
     @Scheduled(cron = "0 0/10 6-22 * * ?")
     public void excuteAtisBasicService() {
@@ -155,7 +155,7 @@ public class BasicSchedule {
                     .invokeParam(JsonUtils.toJson(stationRequest)).invokeStatus(invokeStatus).exceptDesp(exceptDesp)
                     .build());
 
-            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stations), true);
+//            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stations), true);
 
             log.info("getStationInfo() end");
 
@@ -174,6 +174,8 @@ public class BasicSchedule {
             sendEmail("getStationInfo接口请求异常", "异常信息：" + e.getMessage());
 
             addAtisInvokeLog(exceptLog);
+        } finally {
+            System.gc();
         }
 
         return null;
@@ -214,7 +216,7 @@ public class BasicSchedule {
                     .invokeParam(JsonUtils.toJson(stationRequest)).invokeTime(new Date())
                     .invokeStatus(invokeStatus).exceptDesp(exceptDesp).build());
 
-            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stations), true);
+//            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stations), true);
 
             log.info("getStationInfoNoRoute() end");
 
@@ -267,7 +269,7 @@ public class BasicSchedule {
             addAtisInvokeLog(AtisInvokeLog.builder().invokeFunc("getAllStation")
                     .invokeTime(new Date()).invokeStatus(invokeStatus).exceptDesp(exceptDesp).build());
 
-            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stations), true);
+//            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stations), true);
 
             log.info("getAllStation() end");
 
@@ -320,7 +322,7 @@ public class BasicSchedule {
             addAtisInvokeLog(AtisInvokeLog.builder().invokeFunc("getAllStationNoRoute")
                     .invokeTime(new Date()).invokeStatus(invokeStatus).exceptDesp(exceptDesp).build());
 
-            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stations), true);
+//            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stations), true);
 
             log.info("getAllStationNoRoute() end");
 
@@ -376,7 +378,7 @@ public class BasicSchedule {
                     .invokeParam(JsonUtils.toJson(routeRequest)).invokeTime(new Date())
                     .invokeStatus(invokeStatus).exceptDesp(exceptDesp).build());
 
-            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(routes), true);
+//            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(routes), true);
 
             log.info("getRouteInfo() end");
 
@@ -433,7 +435,7 @@ public class BasicSchedule {
                     .invokeParam(JsonUtils.toJson(routeRequest)).invokeTime(new Date())
                     .invokeStatus(invokeStatus).exceptDesp(exceptDesp).build());
 
-            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(segments), true);
+//            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(segments), true);
 
             log.info("getSegmentByRoute() end");
 
@@ -490,7 +492,7 @@ public class BasicSchedule {
                     .invokeParam(JsonUtils.toJson(stationRequest)).invokeTime(new Date())
                     .invokeStatus(invokeStatus).exceptDesp(exceptDesp).build());
 
-            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(routes), true);
+//            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(routes), true);
 
             log.info("getRouteByStation() end");
 
@@ -547,7 +549,7 @@ public class BasicSchedule {
                     .invokeParam(JsonUtils.toJson(segmentRequest)).invokeTime(new Date())
                     .invokeStatus(invokeStatus).exceptDesp(exceptDesp).build());
 
-            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stations), true);
+//            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stations), true);
 
             log.info("getStationBySegment() end");
 
@@ -605,7 +607,7 @@ public class BasicSchedule {
                     .invokeParam(JsonUtils.toJson(stationRequest)).invokeTime(new Date())
                     .invokeStatus(invokeStatus).exceptDesp(exceptDesp).build());
 
-            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stations), true);
+//            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stations), true);
 
             log.info("getStationByGps() end");
 
@@ -663,7 +665,7 @@ public class BasicSchedule {
                     .invokeParam(JsonUtils.toJson(stationRequest)).invokeTime(new Date())
                     .invokeStatus(invokeStatus).exceptDesp(exceptDesp).build());
 
-            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stations), true);
+//            FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stations), true);
 
             log.info("getStationByGpsNoRoute() end");
 

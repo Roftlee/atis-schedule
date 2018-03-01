@@ -4,7 +4,9 @@ import com.yd.atis.dto.AtisInvokeStat;
 import com.yd.atis.facade.atis.AtisInvokeStatFacade;
 import com.yd.atis.facade.mail.MailFacade;
 import com.yd.atis.utils.DateUtils;
+import com.yd.atis.utils.FileUtils;
 import com.yd.atis.utils.JsonUtils;
+import com.yd.atis.utils.ZipUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.Date;
@@ -25,6 +28,9 @@ import java.util.List;
 public class AtisInvokeStatSchedule {
 
     private final Logger log = LoggerFactory.getLogger(AtisInvokeStatSchedule.class);
+
+    @Value("${logback.logdir}")
+    private String logPath;
 
     @Value("${atis.empty.rate.max}")
     private Integer maxEmptyRate;
@@ -43,15 +49,32 @@ public class AtisInvokeStatSchedule {
      */
     @Scheduled(cron = "0 10 22 * * ?")
     public void excuteAtisInvokeStat() {
-        log.info("start atis invoke statistics");
+        String zipFilePath = null;
 
-        List<AtisInvokeStat> atisInvokeStatList = atisInvokeStatFacade.queryAtisInvokeStatList(AtisInvokeStat.builder().build());
+        try {
+            log.info("start atis invoke statistics");
 
-        String subject = "Atis接口调用统计(" + DateUtils.format(new Date(), "yyyy-MM-dd") + ")";
-        String content = getContent(atisInvokeStatList);
-        sendHtmlEmail(subject, content);
+            List<AtisInvokeStat> atisInvokeStatList = atisInvokeStatFacade.queryAtisInvokeStatList(AtisInvokeStat.builder().build());
 
-        log.info("end atis invoke statistics");
+            String subject = "Atis接口调用统计(" + DateUtils.format(new Date(), "yyyy-MM-dd") + ")";
+            String content = getContent(atisInvokeStatList);
+            String attachPath = logPath + DateUtils.format(new Date(), "yyyyMMdd");
+            zipFilePath = attachPath + ".zip";
+            ZipUtils.zipFiles(attachPath, zipFilePath);
+//        sendHtmlEmail(subject, content);
+            sendAttachmentsEmail(subject, content, zipFilePath);
+
+            log.info("end atis invoke statistics");
+        } catch (Exception e) {
+            log.error("aits invoke statistic error");
+        } finally {
+            if (zipFilePath != null) {
+                File zipFile = new File(zipFilePath);
+                if (zipFile.exists()) {
+                    zipFile.delete();
+                }
+            }
+        }
     }
 
     private String getContent(List<AtisInvokeStat> atisInvokeStatList) {
@@ -120,5 +143,9 @@ public class AtisInvokeStatSchedule {
 
     private void sendHtmlEmail(String subject, String content) {
         mailFacade.sendHtmlMail(subject, content);
+    }
+
+    private void sendAttachmentsEmail(String subject, String content, String attachPath) {
+        mailFacade.sendAttachmentsMail(subject, content, attachPath);
     }
 }

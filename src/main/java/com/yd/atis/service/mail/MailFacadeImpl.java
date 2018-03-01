@@ -71,7 +71,7 @@ public class MailFacadeImpl implements MailFacade {
     }
 
     @Override
-    public void sendAttachmentsMail(String subject, String content){
+    public void sendAttachmentsMail(String subject, String content, String attachPath){
         MimeMessage message = null;
         try {
             String[] toList = mailTo.split(",");
@@ -80,12 +80,13 @@ public class MailFacadeImpl implements MailFacade {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             helper.setFrom(sender);
             helper.setTo(toList);
-            helper.setSubject("主题：带附件的邮件");
-            helper.setText("带附件的邮件内容");
+            helper.setSubject(subject);
+            helper.setText(content, true);
             //注意项目路径问题，自动补用项目路径
-            FileSystemResource file = new FileSystemResource(new File("src/main/resources/static/image/picture.jpg"));
+//            FileSystemResource file = new FileSystemResource(new File("src/main/resources/static/image/picture.jpg"));
+            File attachFile = new File(attachPath);
             //加入邮件
-            helper.addAttachment("图片.jpg", file);
+            helper.addAttachment(attachFile.getName(), attachFile);
         } catch (Exception e){
             e.printStackTrace();
         }

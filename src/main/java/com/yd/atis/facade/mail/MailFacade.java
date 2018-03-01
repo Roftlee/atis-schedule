@@ -19,7 +19,7 @@ public interface MailFacade {
     /**
      * 发送带附件的邮件
      */
-    public void sendAttachmentsMail(String subject, String content);
+    public void sendAttachmentsMail(String subject, String content, String attachPath);
 
     /**
      * 发送带静态资源的邮件

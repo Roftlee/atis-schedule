@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -56,7 +57,7 @@ public class TestSchedule {
     private AtisInvokeLogFacade atisInvokeLogFacade;
 
 //    @Scheduled(cron = "*/10 * * * * ?")
-    private void test() {
+    public void test() {
         try {
             log.info("start to excute test()");
 
@@ -86,20 +87,21 @@ public class TestSchedule {
 
             FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stations), true);
 
-            AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("Test")
-                    .invokeParam(JsonUtils.toJson(stationRequest)).invokeStatus(0).exceptDesp("测试接口调用异常")
-                    .exceptType(1).invokeTime(new Date()).build();
-            atisInvokeLogFacade.insertSelective(exceptLog);
+//            AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("Test")
+//                    .invokeParam(JsonUtils.toJson(stationRequest)).invokeStatus(0).exceptDesp("测试接口调用异常")
+//                    .exceptType(1).invokeTime(new Date()).build();
+//            atisInvokeLogFacade.insertSelective(exceptLog);
 
             log.info("excute test() end");
 
-//            throw new Exception("this is a manual exception");
+            throw new Exception("this is a manual exception");
 
         } catch (Exception e) {
             log.info("excute test() error");
             log.error(e.getMessage());
 
-            mailFacade.sendSimpleEmail("test方法请求异常", "异常信息：" + e.getMessage());
+//            mailFacade.sendSimpleEmail("test方法请求异常", "异常信息：" + e.getMessage());
+            mailFacade.sendAttachmentsMail("test方法请求异常", "异常信息：" + e.getMessage(), "");
         }
     }
 }
