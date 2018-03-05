@@ -9,25 +9,25 @@ public interface MailFacade {
     /**
      * 发送简单文本邮件
      */
-    public void sendSimpleEmail(String subject, String content);
+    public void sendSimpleEmail(String subject, String content) throws Exception;
 
     /**
      * 发送Html邮件
      */
-    public void sendHtmlMail(String subject, String content);
+    public void sendHtmlMail(String subject, String content) throws Exception;
 
     /**
      * 发送带附件的邮件
      */
-    public void sendAttachmentsMail(String subject, String content, String attachPath);
+    public void sendAttachmentsMail(String subject, String content, String attachPath) throws Exception;
 
     /**
      * 发送带静态资源的邮件
      */
-    public void sendInlineMail(String subject, String content);
+    public void sendInlineMail(String subject, String content) throws Exception;
 
     /**
      * 发送模板邮件
      */
-    public void sendTemplateMail(String subject, String content);
+    public void sendTemplateMail(String subject, String content) throws Exception;
 }

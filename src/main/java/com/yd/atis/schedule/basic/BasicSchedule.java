@@ -84,7 +84,7 @@ public class BasicSchedule {
     /**
      * 定时调度任务 每天6点到22点之间每10分钟调用一次
      */
-    @Scheduled(cron = "0 0/10 6-22 * * ?")
+    @Scheduled(cron = "0 0/10 6-21 * * ?")
     public void excuteAtisBasicService() {
 
         log.info("Atis basic task start!");
@@ -695,7 +695,11 @@ public class BasicSchedule {
      * @param content 邮件内容
      */
     private void sendEmail(String subject, String content) {
-        mailFacade.sendSimpleEmail(subject, content);
+        try {
+            mailFacade.sendSimpleEmail(subject, content);
+        } catch (Exception e) {
+            log.error("email send error, message:" + e.getMessage());
+        }
     }
 
     /**

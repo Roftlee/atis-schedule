@@ -39,23 +39,30 @@ public class MailFacadeImpl implements MailFacade {
     @Value("${spring.mail.to}")
     private String mailTo;
 
+    @Value("${spring.mail.cc}")
+    private String mailCc;
+
     @Override
-    public void sendSimpleEmail(String subject, String content){
-        String[] toList = mailTo.split(",");
+    public void sendSimpleEmail(String subject, String content) throws Exception{
+        try {
+            String[] toList = mailTo.split(",");
 
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(sender);
-        message.setTo(toList);
-        message.setSubject(subject);
-        message.setText(content);
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom(sender);
+            message.setTo(toList);
+            message.setSubject(subject);
+            message.setText(content);
 
-        mailSender.send(message);
+            mailSender.send(message);
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     @Override
-    public void sendHtmlMail(String subject, String content){
-        MimeMessage message = null;
+    public void sendHtmlMail(String subject, String content) throws Exception{
         try {
+            MimeMessage message = null;
             String[] toList = mailTo.split(",");
 
             message = mailSender.createMimeMessage();
@@ -64,22 +71,25 @@ public class MailFacadeImpl implements MailFacade {
             helper.setTo(toList);
             helper.setSubject(subject);
             helper.setText(content, true);
+
+            mailSender.send(message);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw e;
         }
-        mailSender.send(message);
     }
 
     @Override
-    public void sendAttachmentsMail(String subject, String content, String attachPath){
-        MimeMessage message = null;
+    public void sendAttachmentsMail(String subject, String content, String attachPath) throws Exception{
         try {
+            MimeMessage message = null;
             String[] toList = mailTo.split(",");
+            String[] ccList = mailCc.split(",");
 
             message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             helper.setFrom(sender);
             helper.setTo(toList);
+            helper.setCc(ccList);
             helper.setSubject(subject);
             helper.setText(content, true);
             //注意项目路径问题，自动补用项目路径
@@ -87,16 +97,18 @@ public class MailFacadeImpl implements MailFacade {
             File attachFile = new File(attachPath);
             //加入邮件
             helper.addAttachment(attachFile.getName(), attachFile);
+
+            mailSender.send(message);
         } catch (Exception e){
-            e.printStackTrace();
+            throw e;
         }
-        mailSender.send(message);
     }
 
     @Override
-    public void sendInlineMail(String subject, String content){
-        MimeMessage message = null;
+    public void sendInlineMail(String subject, String content) throws Exception{
         try {
+            MimeMessage message = null;
+
             String[] toList = mailTo.split(",");
 
             message = mailSender.createMimeMessage();
@@ -109,16 +121,17 @@ public class MailFacadeImpl implements MailFacade {
 
             FileSystemResource file = new FileSystemResource(new File("src/main/resources/static/image/picture.jpg"));
             helper.addInline("picture",file);
+
+            mailSender.send(message);
         } catch (Exception e){
-            e.printStackTrace();
+            throw e;
         }
-        mailSender.send(message);
     }
 
     @Override
-    public void sendTemplateMail(String subject, String content){
-        MimeMessage message = null;
+    public void sendTemplateMail(String subject, String content) throws Exception{
         try {
+            MimeMessage message = null;
             String[] toList = mailTo.split(",");
 
             message = mailSender.createMimeMessage();
@@ -137,9 +150,10 @@ public class MailFacadeImpl implements MailFacade {
             Template template = freeMarkerConfigurer.getConfiguration().getTemplate("mail.html");
             String html = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
             helper.setText(html, true);
+
+            mailSender.send(message);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw e;
         }
-        mailSender.send(message);
     }
 }

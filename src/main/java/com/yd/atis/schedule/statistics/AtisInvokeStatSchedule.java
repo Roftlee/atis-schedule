@@ -66,14 +66,14 @@ public class AtisInvokeStatSchedule {
 
             log.info("end atis invoke statistics");
         } catch (Exception e) {
-            log.error("aits invoke statistic error");
+            log.error("aits invoke statistic error, message:" + e.getMessage());
         } finally {
-            if (zipFilePath != null) {
-                File zipFile = new File(zipFilePath);
-                if (zipFile.exists()) {
-                    zipFile.delete();
-                }
-            }
+//            if (zipFilePath != null) {
+//                File zipFile = new File(zipFilePath);
+//                if (zipFile.exists()) {
+//                    zipFile.delete();
+//                }
+//            }
         }
     }
 
@@ -142,10 +142,18 @@ public class AtisInvokeStatSchedule {
     }
 
     private void sendHtmlEmail(String subject, String content) {
-        mailFacade.sendHtmlMail(subject, content);
+        try {
+            mailFacade.sendHtmlMail(subject, content);
+        } catch (Exception e) {
+            log.error("email send error, message:" + e.getMessage());
+        }
     }
 
     private void sendAttachmentsEmail(String subject, String content, String attachPath) {
-        mailFacade.sendAttachmentsMail(subject, content, attachPath);
+        try {
+            mailFacade.sendAttachmentsMail(subject, content, attachPath);
+        } catch (Exception e) {
+            log.error("email send error, message:" + e.getMessage());
+        }
     }
 }

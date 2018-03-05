@@ -14,6 +14,7 @@ import com.yd.atis.schedule.basic.BasicSchedule;
 import com.yd.atis.utils.DateUtils;
 import com.yd.atis.utils.FileUtils;
 import com.yd.atis.utils.JsonUtils;
+import com.yd.atis.utils.ZipUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,10 +80,15 @@ public class TestSchedule {
             FileUtils.writeFile(fileName, SysConstant.REQ_DESC_PREFIX + JsonUtils.toJson(stationRequest), true);
 
             //获取站点基础信息
-            StationInfoEntity[] stations = new StationInfoEntity[1];
+            StationInfoEntity[] stations = new StationInfoEntity[0];
 
             if (stations == null || stations.length == 0) {
-                mailFacade.sendSimpleEmail("test方法返回null", "test方法返回null，请求参数：" + JsonUtils.toJson(stationRequest));
+//                sendSimpleEmail("测试邮件", "因公交接口统计邮件屡次发送异常，特此发送邮件测试，请忽略");
+
+                String attachPath = logPath + DateUtils.format(new Date(), "yyyyMMdd");
+                String zipFilePath = attachPath + ".zip";
+                ZipUtils.zipFiles(attachPath, zipFilePath);
+                sendAttachmentsEmail("测试邮件", "因公交接口统计邮件屡次发送异常，特此发送邮件测试，请忽略", zipFilePath);
             }
 
             FileUtils.writeFile(fileName, SysConstant.RES_DESC_PREFIX + JsonUtils.toJson(stations), true);
@@ -94,14 +100,43 @@ public class TestSchedule {
 
             log.info("excute test() end");
 
-            throw new Exception("this is a manual exception");
+//            throw new Exception("this is a manual exception");
 
         } catch (Exception e) {
             log.info("excute test() error");
             log.error(e.getMessage());
 
 //            mailFacade.sendSimpleEmail("test方法请求异常", "异常信息：" + e.getMessage());
-            mailFacade.sendAttachmentsMail("test方法请求异常", "异常信息：" + e.getMessage(), "");
+            try {
+                String attachPath = logPath + DateUtils.format(new Date(), "yyyyMMdd");
+                String zipFilePath = attachPath + ".zip";
+                ZipUtils.zipFiles(attachPath, zipFilePath);
+//        sendHtmlEmail(subject, content);
+                sendAttachmentsEmail("test方法请求异常", "异常信息：" + e.getMessage(), zipFilePath);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * 发送邮件
+     * @param subject 邮件主题
+     * @param content 邮件内容
+     */
+    private void sendSimpleEmail(String subject, String content) {
+        try {
+            mailFacade.sendSimpleEmail(subject, content);
+        } catch (Exception e) {
+            log.error("email send error, message:" + e.getMessage());
+        }
+    }
+
+    private void sendAttachmentsEmail(String subject, String content, String attachPath) {
+        try {
+            mailFacade.sendAttachmentsMail(subject, content, attachPath);
+        } catch (Exception e) {
+            log.error("email send error, message:" + e.getMessage());
         }
     }
 }
