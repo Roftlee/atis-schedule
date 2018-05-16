@@ -46,10 +46,12 @@ public class MailFacadeImpl implements MailFacade {
     public void sendSimpleEmail(String subject, String content) throws Exception{
         try {
             String[] toList = mailTo.split(",");
+            String[] ccList = mailCc.split(",");
 
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(sender);
             message.setTo(toList);
+            message.setCc(ccList);
             message.setSubject(subject);
             message.setText(content);
 
@@ -64,11 +66,13 @@ public class MailFacadeImpl implements MailFacade {
         try {
             MimeMessage message = null;
             String[] toList = mailTo.split(",");
+            String[] ccList = mailCc.split(",");
 
             message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             helper.setFrom(sender);
             helper.setTo(toList);
+            helper.setCc(ccList);
             helper.setSubject(subject);
             helper.setText(content, true);
 
@@ -110,11 +114,13 @@ public class MailFacadeImpl implements MailFacade {
             MimeMessage message = null;
 
             String[] toList = mailTo.split(",");
+            String[] ccList = mailCc.split(",");
 
             message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             helper.setFrom(sender);
             helper.setTo(toList);
+            helper.setCc(ccList);
             helper.setSubject("主题：带静态资源的邮件");
             //第二个参数指定发送的是HTML格式,同时cid:是固定的写法
             helper.setText("<html><body>带静态资源的邮件内容 图片:<img src='cid:picture' /></body></html>", true);

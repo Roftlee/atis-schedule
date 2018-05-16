@@ -164,14 +164,14 @@ public class BasicSchedule {
             log.info("getStationInfo() error");
             log.error(e.getMessage());
 
-            sendEmail("getStationInfo接口请求异常", "异常信息：" + e.getMessage());
+//            sendEmail("getStationInfo接口请求异常", "异常信息：" + e.getMessage());
 
             addAtisInvokeLog(exceptLog);
         } catch (RemoteException e) {
             log.info("getStationInfo() error");
             log.error(e.getMessage());
 
-            sendEmail("getStationInfo接口请求异常", "异常信息：" + e.getMessage());
+//            sendEmail("getStationInfo接口请求异常", "异常信息：" + e.getMessage());
 
             addAtisInvokeLog(exceptLog);
         } finally {
@@ -225,14 +225,14 @@ public class BasicSchedule {
             log.info("getStationInfoNoRoute() error");
             log.error(e.getMessage());
 
-            sendEmail("getStationInfoNoRoute接口请求异常", "异常信息：" + e.getMessage());
+//            sendEmail("getStationInfoNoRoute接口请求异常", "异常信息：" + e.getMessage());
 
             addAtisInvokeLog(exceptLog);
         } catch (RemoteException e) {
             log.info("getStationInfoNoRoute() error");
             log.error(e.getMessage());
 
-            sendEmail("getStationInfoNoRoute接口请求异常", "异常信息：" + e.getMessage());
+//            sendEmail("getStationInfoNoRoute接口请求异常", "异常信息：" + e.getMessage());
 
             addAtisInvokeLog(exceptLog);
         }
@@ -278,14 +278,14 @@ public class BasicSchedule {
             log.info("getAllStation() error");
             log.error(e.getMessage());
 
-            sendEmail("getAllStation接口请求异常", "异常信息：" + e.getMessage());
+//            sendEmail("getAllStation接口请求异常", "异常信息：" + e.getMessage());
 
             addAtisInvokeLog(exceptLog);
         } catch (RemoteException e) {
             log.info("getAllStation() error");
             log.error(e.getMessage());
 
-            sendEmail("getAllStation接口请求异常", "异常信息：" + e.getMessage());
+//            sendEmail("getAllStation接口请求异常", "异常信息：" + e.getMessage());
 
             addAtisInvokeLog(exceptLog);
         }
@@ -331,14 +331,14 @@ public class BasicSchedule {
             log.info("getAllStationNoRoute() error");
             log.error(e.getMessage());
 
-            sendEmail("getAllStationNoRoute接口请求异常", "异常信息：" + e.getMessage());
+//            sendEmail("getAllStationNoRoute接口请求异常", "异常信息：" + e.getMessage());
 
             addAtisInvokeLog(exceptLog);
         } catch (RemoteException e) {
             log.info("getAllStationNoRoute() error");
             log.error(e.getMessage());
 
-            sendEmail("getAllStationNoRoute接口请求异常", "异常信息：" + e.getMessage());
+//            sendEmail("getAllStationNoRoute接口请求异常", "异常信息：" + e.getMessage());
 
             addAtisInvokeLog(exceptLog);
         }
@@ -387,14 +387,14 @@ public class BasicSchedule {
             log.info("getRouteInfo() error");
             log.error(e.getMessage());
 
-            sendEmail("getRouteInfo接口请求异常", "异常信息：" + e.getMessage());
+//            sendEmail("getRouteInfo接口请求异常", "异常信息：" + e.getMessage());
 
             addAtisInvokeLog(exceptLog);
         } catch (RemoteException e) {
             log.info("getRouteInfo() error");
             log.error(e.getMessage());
 
-            sendEmail("getRouteInfo接口请求异常", "异常信息：" + e.getMessage());
+//            sendEmail("getRouteInfo接口请求异常", "异常信息：" + e.getMessage());
 
             addAtisInvokeLog(exceptLog);
         }
@@ -444,14 +444,14 @@ public class BasicSchedule {
             log.info("getSegmentByRoute() error");
             log.error(e.getMessage());
 
-            sendEmail("getSegmentByRoute接口请求异常", "异常信息：" + e.getMessage());
+//            sendEmail("getSegmentByRoute接口请求异常", "异常信息：" + e.getMessage());
 
             addAtisInvokeLog(exceptLog);
         } catch (RemoteException e) {
             log.info("getSegmentByRoute() error");
             log.error(e.getMessage());
 
-            sendEmail("getSegmentByRoute接口请求异常", "异常信息：" + e.getMessage());
+//            sendEmail("getSegmentByRoute接口请求异常", "异常信息：" + e.getMessage());
 
             addAtisInvokeLog(exceptLog);
         }
@@ -501,14 +501,14 @@ public class BasicSchedule {
             log.info("getRouteByStation() error");
             log.error(e.getMessage());
 
-            sendEmail("getRouteByStation接口请求异常", "异常信息：" + e.getMessage());
+//            sendEmail("getRouteByStation接口请求异常", "异常信息：" + e.getMessage());
 
             addAtisInvokeLog(exceptLog);
         } catch (RemoteException e) {
             log.info("getRouteByStation() error");
             log.error(e.getMessage());
 
-            sendEmail("getRouteByStation接口请求异常", "异常信息：" + e.getMessage());
+//            sendEmail("getRouteByStation接口请求异常", "异常信息：" + e.getMessage());
 
             addAtisInvokeLog(exceptLog);
         }
@@ -558,14 +558,14 @@ public class BasicSchedule {
             log.info("getStationBySegment() error");
             log.error(e.getMessage());
 
-            sendEmail("getStationBySegment接口请求异常", "异常信息：" + e.getMessage());
+//            sendEmail("getStationBySegment接口请求异常", "异常信息：" + e.getMessage());
 
             addAtisInvokeLog(exceptLog);
         } catch (RemoteException e) {
             log.info("getStationBySegment() error");
             log.error(e.getMessage());
 
-            sendEmail("getStationBySegment接口请求异常", "异常信息：" + e.getMessage());
+//            sendEmail("getStationBySegment接口请求异常", "异常信息：" + e.getMessage());
 
             addAtisInvokeLog(exceptLog);
         }
@@ -616,14 +616,14 @@ public class BasicSchedule {
             log.info("getStationByGps() error");
             log.error(e.getMessage());
 
-            sendEmail("getStationByGps接口请求异常", "异常信息：" + e.getMessage());
+//            sendEmail("getStationByGps接口请求异常", "异常信息：" + e.getMessage());
 
             addAtisInvokeLog(exceptLog);
         } catch (RemoteException e) {
             log.info("getStationByGps() error");
             log.error(e.getMessage());
 
-            sendEmail("getStationByGps接口请求异常", "异常信息：" + e.getMessage());
+//            sendEmail("getStationByGps接口请求异常", "异常信息：" + e.getMessage());
 
             addAtisInvokeLog(exceptLog);
         }
@@ -674,14 +674,14 @@ public class BasicSchedule {
             log.info("getStationByGpsNoRoute() error");
             log.error(e.getMessage());
 
-            sendEmail("getStationByGpsNoRoute接口请求异常", "异常信息：" + e.getMessage());
+//            sendEmail("getStationByGpsNoRoute接口请求异常", "异常信息：" + e.getMessage());
 
             addAtisInvokeLog(exceptLog);
         } catch (RemoteException e) {
             log.info("getStationByGpsNoRoute() error");
             log.error(e.getMessage());
 
-            sendEmail("getStationByGpsNoRoute接口请求异常", "异常信息：" + e.getMessage());
+//            sendEmail("getStationByGpsNoRoute接口请求异常", "异常信息：" + e.getMessage());
 
             addAtisInvokeLog(exceptLog);
         }

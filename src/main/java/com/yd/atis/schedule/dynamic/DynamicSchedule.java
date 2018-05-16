@@ -119,7 +119,9 @@ public class DynamicSchedule {
         log.info("start to excute queryByStationID()");
 
         StationInfo stationInfo = stationInfoMapper.selectByRandom();
-        StationRequest stationRequest = StationRequest.builder().routeId("-1").segmentId("").stationId(stationInfo.getStationId()).build();
+
+        //临时取固定站点
+        StationRequest stationRequest = StationRequest.builder().routeId("-1").segmentId("").stationId("7070137").build();
 
         AtisInvokeLog exceptLog = AtisInvokeLog.builder().invokeFunc("queryByStationID")
                 .invokeParam(JsonUtils.toJson(stationRequest)).invokeStatus(0).exceptDesp("接口调用异常")
@@ -140,6 +142,8 @@ public class DynamicSchedule {
             if (arriveStationBusEntities == null || arriveStationBusEntities.length == 0) {
                 invokeStatus = 0;
                 exceptDesp = "接口返回结果为空";
+
+                sendEmail("数据异常告警", "实时公交接口[queryByStationID]无数据返回，请求参数:" + JsonUtils.toJson(stationRequest));
             }
 
             addAtisInvokeLog(AtisInvokeLog.builder().invokeFunc("queryByStationID")
@@ -217,14 +221,14 @@ public class DynamicSchedule {
             log.info("queryByStationID2() error");
             log.error(e.getMessage());
 
-            sendEmail("queryByStationID2接口请求异常", "异常信息：" + e.getMessage());
+//            sendEmail("queryByStationID2接口请求异常", "异常信息：" + e.getMessage());
 
             addAtisInvokeLog(exceptLog);
         } catch (RemoteException e) {
             log.info("queryByStationID2() error");
             log.error(e.getMessage());
 
-            sendEmail("queryByStationID2接口请求异常", "异常信息：" + e.getMessage());
+//            sendEmail("queryByStationID2接口请求异常", "异常信息：" + e.getMessage());
 
             addAtisInvokeLog(exceptLog);
         }
@@ -278,14 +282,14 @@ public class DynamicSchedule {
             log.info("requireBusPosition() error");
             log.error(e.getMessage());
 
-            sendEmail("requireBusPosition接口请求异常", "异常信息：" + e.getMessage());
+//            sendEmail("requireBusPosition接口请求异常", "异常信息：" + e.getMessage());
 
             addAtisInvokeLog(exceptLog);
         } catch (RemoteException e) {
             log.info("requireBusPosition() error");
             log.error(e.getMessage());
 
-            sendEmail("requireBusPosition接口请求异常", "异常信息：" + e.getMessage());
+//            sendEmail("requireBusPosition接口请求异常", "异常信息：" + e.getMessage());
 
             addAtisInvokeLog(exceptLog);
         }
@@ -336,14 +340,14 @@ public class DynamicSchedule {
             log.info("queryDetailByRouteId() error");
             log.error(e.getMessage());
 
-            sendEmail("queryDetailByRouteId接口请求异常", "异常信息：" + e.getMessage());
+//            sendEmail("queryDetailByRouteId接口请求异常", "异常信息：" + e.getMessage());
 
             addAtisInvokeLog(exceptLog);
         } catch (RemoteException e) {
             log.info("queryDetailByRouteId() error");
             log.error(e.getMessage());
 
-            sendEmail("queryDetailByRouteId接口请求异常", "异常信息：" + e.getMessage());
+//            sendEmail("queryDetailByRouteId接口请求异常", "异常信息：" + e.getMessage());
 
             addAtisInvokeLog(exceptLog);
         }
@@ -397,14 +401,14 @@ public class DynamicSchedule {
             log.info("queryDetailByRouteID2() error");
             log.error(e.getMessage());
 
-            sendEmail("queryDetailByRouteID2接口请求异常", "异常信息：" + e.getMessage());
+//            sendEmail("queryDetailByRouteID2接口请求异常", "异常信息：" + e.getMessage());
 
             addAtisInvokeLog(exceptLog);
         } catch (RemoteException e) {
             log.info("queryDetailByRouteID2() error");
             log.error(e.getMessage());
 
-            sendEmail("queryDetailByRouteID2接口请求异常", "异常信息：" + e.getMessage());
+//            sendEmail("queryDetailByRouteID2接口请求异常", "异常信息：" + e.getMessage());
 
             addAtisInvokeLog(exceptLog);
         }
@@ -455,14 +459,14 @@ public class DynamicSchedule {
             log.info("requireRouteSpeed() error");
             log.error(e.getMessage());
 
-            sendEmail("requireRouteSpeed接口请求异常", "异常信息：" + e.getMessage());
+//            sendEmail("requireRouteSpeed接口请求异常", "异常信息：" + e.getMessage());
 
             addAtisInvokeLog(exceptLog);
         } catch (RemoteException e) {
             log.info("requireRouteSpeed() error");
             log.error(e.getMessage());
 
-            sendEmail("requireRouteSpeed接口请求异常", "异常信息：" + e.getMessage());
+//            sendEmail("requireRouteSpeed接口请求异常", "异常信息：" + e.getMessage());
 
             addAtisInvokeLog(exceptLog);
         }
@@ -511,14 +515,14 @@ public class DynamicSchedule {
             log.info("querAllBusLastStation() error");
             log.error(e.getMessage());
 
-            sendEmail("querAllBusLastStation接口请求异常", "异常信息：" + e.getMessage());
+//            sendEmail("querAllBusLastStation接口请求异常", "异常信息：" + e.getMessage());
 
             addAtisInvokeLog(exceptLog);
         } catch (RemoteException e) {
             log.info("querAllBusLastStation() error");
             log.error(e.getMessage());
 
-            sendEmail("querAllBusLastStation接口请求异常", "异常信息：" + e.getMessage());
+//            sendEmail("querAllBusLastStation接口请求异常", "异常信息：" + e.getMessage());
 
             addAtisInvokeLog(exceptLog);
         }
@@ -567,14 +571,14 @@ public class DynamicSchedule {
             log.info("queryAllBusLastPosition() error");
             log.error(e.getMessage());
 
-            sendEmail("queryAllBusLastPosition接口请求异常", "异常信息：" + e.getMessage());
+//            sendEmail("queryAllBusLastPosition接口请求异常", "异常信息：" + e.getMessage());
 
             addAtisInvokeLog(exceptLog);
         } catch (RemoteException e) {
             log.info("queryAllBusLastPosition() error");
             log.error(e.getMessage());
 
-            sendEmail("queryAllBusLastPosition接口请求异常", "异常信息：" + e.getMessage());
+//            sendEmail("queryAllBusLastPosition接口请求异常", "异常信息：" + e.getMessage());
 
             addAtisInvokeLog(exceptLog);
         }
